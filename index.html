@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz sobre Nutrição Humana</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -68,7 +69,12 @@
         .feedback {
             font-size: 18px;
             margin-top: 10px;
-            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .feedback.visible {
+            opacity: 1;
         }
 
         .feedback.correct {
@@ -95,179 +101,313 @@
 
         @media (max-width: 600px) {
             .quiz-container {
-                padding: 15px;
+                padding: 10px;
             }
             .answers button {
                 font-size: 14px;
+                padding: 8px;
+            }
+            .print-btn {
+                padding: 8px 16px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Quiz 1 -->
     <div class="quiz-container">
-        <h2>1. Os esteróis são considerados uma categoria especial de lipídeos. São componentes insolúveis em água e com baixa solubilidade em óleo, sendo encontrados em diversos seres vivos. O colesterol é o esterol mais conhecido e de grande importância na saúde.
-Fonte: MAHAN, L. K.; ESCOTT-STUMP, S.; RAYMOND, J.L. Krause: Alimentos, Nutrição e Dietoterapia. 13ª ed. Rio de Janeiro: Elsevier, 2013.
-Considerando as funções metabólicas associadas ao colesterol, avalie as asserções a seguir e a relação proposta entre elas.
-
-Avalie as asserções sobre o colesterol e os níveis de lipoproteínas no organismo:</h2>
-        <p>I. No organismo humano, o colesterol é utilizado como matéria-prima para a produção de hormônios esteroides e sais biliares.</p>
-        <p>II. Níveis elevados de lipoproteínas na corrente sanguínea podem representar riscos à saúde, especialmente de infarto.</p>
-        <p><strong>A respeito dessas asserções, assinale a opção correta:</strong></p>
-
-        <div class="answers">
-            <button data-correct="false">A. As asserções I e II são proposições falsas.</button>
-            <button data-correct="true">B. As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.</button>
-            <button data-correct="false">C. As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.</button>
-            <button data-correct="false">D. A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.</button>
-            <button data-correct="false">E. A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.</button>
-        </div>
-
-        <p class="feedback"></p>
-    </div>
-
-    <!-- (Os demais quizzes seguem a mesma estrutura, com os botões marcados com data-correct="true" ou "false") -->
-
-    <!-- Quiz 2 -->
-    <div class="quiz-container">
-        <h2>2. Os carboidratos fornecem a maior parte da energia necessária para manutenção das atividades das pessoas. A ingestão diária recomendada de carboidratos é de 50% a 60% do valor calórico total. Eles são encontrados nos amidos e açúcares e, com exceção da lactose do leite e do glicogênio do tecido animal, são de origem vegetal. São classificados em simples e complexos. Glicose, frutose, sacarose e lactose são os carboidratos simples mais encontrados nos alimentos, estando o amido entre os complexos.
-Os carboidratos são divididos em quatro tipos de estruturas: os monossacarídeos, dissacarídeos, oligossacarídeos e os polissacarídeos.
-De acordo com as classificações dos carboidratos, avalie as asserções:</h2>
-        <p>I. Os monossacarídeos são representados pela fórmula Cn(H2O)n, sendo classificados como estruturas simples.</p>
-        <p>II. Em reações de oxirredução, a ligação entre carbonos é quebrada para produzir ácido carboxílico (COOH), fornecendo energia ao organismo.</p>
-        <p><strong>A respeito dessas asserções, assinale a opção correta:</strong></p>
-
-        <div class="answers">
-            <button data-correct="false">A. As asserções I e II são verdadeiras, e a II é uma justificativa correta da I.</button>
-            <button data-correct="true">B. As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.</button>
-            <button data-correct="false">C. A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.</button>
-            <button data-correct="false">D. As asserções I e II são falsas.</button>
-            <button data-correct="false">E. A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.</button>
-        </div>
-
-        <p class="feedback"></p>
-    </div>
-
-<!-- Quiz 11 -->
-<div class="quiz-container">
-    <h2>3. "Quando se fala em alimentação não há como não pensar na consequência da falta da mesma: a fome. Problema de extrema gravidade que atinge milhões de pessoas em todo o mundo. As desigualdades econômicas e sociais têm impossibilitado que as populações, principalmente de países em desenvolvimento, tenham acesso à alimentação".
-
-    Fonte: ABREU, E. S. et al. Alimentação mundial uma reflexão sobre história. Saúde e Sociedade. v. 10, p. 2, 2001.
-
-    Sobre a ausência de uma determinada substância, o corpo se adapta a fim de utilizar a nossa segunda fonte de energia: a gordura. De acordo com a nossa primeira fonte de energia, assinale a alternativa correta:</h2>
+    <h2>
+        01-O consumo de alimentos fritos vem crescendo nos últimos anos, sua ingestão pode se tornar perigosa quando no preparo são utilizados óleos de má qualidade. Durante a fritura por imersão de alimentos, podem ocorrer diversas alterações físicas e químicas no óleo, influenciando nos produtos destinados ao consumo. Diante disto, torna-se importante analisar a qualidade dos óleos utilizados para frituras em Unidades Produtoras de Refeições.
+        <br><br>
+        Fonte: DIJULI, Deise Aparecida da Silva et al. Processos de fritura em escala laboratorial e industrial para estabelecer procedimentos de boas práticas. 2021. Dissertação de Mestrado. Universidade Tecnológica Federal do Paraná.
+        <br><br>
+        Considerando o assunto e os estudos sobre óleos e gorduras na técnica e dietética, assinale a alternativa correta.
+    </h2>
     
     <div class="answers">
-        <button data-correct="false">A. Os minerais.</button>
-        <button data-correct="false">B. A gordura.</button>
-        <button data-correct="true">C. A glicose.</button>
-        <button data-correct="false">D. Os lipídios.</button>
-        <button data-correct="false">E. As vitaminas.</button>
+        <button data-correct="false">1. Os óleos e as gorduras são sólidos à temperatura ambiente.</button>
+        <button data-correct="true">2. Durante o aquecimento em altas temperaturas, o glicerol é liberado em forma de fumaça branca.</button>
+        <button data-correct="false">3. Na fritura dos alimentos é indicada a escolha de um óleo com menor resistência a altas temperaturas.</button>
+        <button data-correct="false">4. O azeite de oliva de todos os tipos de gordura é o que possui a maior temperatura do ponto de fumaça no tempo de 7 minutos de aquecimento.</button>
+        <button data-correct="false">5. A fumaça branca e densa liberada na hidrólise das gorduras pode ser observada a olho nu e esta alteração física é conhecida como ponto de fumaça.</button>
     </div>
+
+    <p class="feedback"></p>
+</div>
+<!-- Quiz sobre cálculo de compras para salada de cenoura -->
+<div class="quiz-container">
+    <h2>
+        2-O cardápio do almoço de sexta-feira de uma Unidade Produtora de Refeições inclui uma preparação de salada de cenoura crua. A nutricionista da unidade precisa fazer o pedido de compras para essa preparação. A mesma sabe que nesta unidade almoçam diariamente 120 funcionários, que o per capita dessa preparação é de 150 g e que o fator de correção (FC) dessa cenoura é 2.
+        <br><br>
+        Elaborado pelo professor, 2023.
+        <br><br>
+        Assinale a alternativa que apresenta quantos quilos dessa cenoura ela precisa comprar para servir a preparação para 120 pessoas:
+    </h2>
     
+    <div class="answers">
+        <button data-correct="false">1. 34 kg.</button>
+        <button data-correct="true">2. 36 kg.</button>
+        <button data-correct="false">3. 40 kg.</button>
+        <button data-correct="false">4. 360 kg.</button>
+        <button data-correct="false">5. 36.000 kg.</button>
+    </div>
+
     <p class="feedback"></p>
 </div>
 
-<!-- Quiz 12 -->
+<!-- Quiz sobre processamento tecnológico do leite -->
 <div class="quiz-container">
-    <h2>4. "Uma definição abrangente e simplificada para a palavra dieta seria o 'emprego metódico de alimentos', ou seja, o consumo diário de produtos com substâncias nutritivas. Por essa definição, todas as pessoas que consomem alimentos diariamente, de modo sistemático, fazem dieta, independentemente da sua finalidade, que poderia ser o emagrecimento, saciar a fome ou o prazer de degustar um alimento com apresentação convidativa."
-
-    Fonte: <a href="http://cm-kls-content.s3.amazonaws.com/201601/INTERATIVAS_2_0/BASE_DA_NUTRICAO_E_DIETETICA/U1/LIVRO_UNICO.pdf" target="_blank">Link para a fonte</a>. Acesso em: 28 jul. 2023.
-
-    Sobre a avaliação da qualidade das dietas, de acordo com a sua funcionalidade, analise as afirmativas a seguir:</h2>
-    
-    <p>I. A proporção dos grupos alimentares em cada refeição.</p>
-    <p>II. A variedade de alimentos presentes em cada refeição.</p>
-    <p>III. A necessidade energética recomendada deve ser suprida.</p>
-    <p>IV. A avaliação da qualidade das dietas deve analisar a oferta adequada de determinados tipos de nutrientes.</p>
-    
-    <p><strong>É correto o que se afirma em:</strong></p>
+    <h2>
+        3- No vasto mercado global de leite, a segurança do alimento é o mais importante. O processo térmico realizado no leite precisa ser estéril, e não há nenhum espaço para erros. Os consumidores de hoje estão mais conscientes sobre segurança do que nunca, e por isso é tão importante saber que as matérias-primas, equipamentos de produção e rotinas atendem aos padrões de higiene mais altos possíveis.
+        <br><br>
+        Disponível em: <a href="https://bit.ly/2muQV7C" target="_blank">https://bit.ly/2muQV7C</a>. Acesso em: 20 de ago. 2023.
+        <br><br>
+        Considerando as informações acima e o que foi estudado na disciplina a respeito do processamento tecnológico do leite, avalie as asserções a seguir e a relação proposta entre elas:
+        <br><br>
+        I. O tratamento UHT, Ultra High Temperature, elimina todos os microrganismos patogênicos viáveis no produto final, justificando o seu armazenamento em temperatura ambiente.
+        <br><br>
+        PORQUE
+        <br><br>
+        II. O processo de Uperização ou Ultrapasteurização realiza o aquecimento do leite à temperatura de aproximadamente 150ºC, por cerca de quatro segundos, seguido por um rápido resfriamento, até uma temperatura menor que 32°C.
+        <br><br>
+        A respeito dessas asserções, assinale a opção correta:
+    </h2>
     
     <div class="answers">
-        <button data-correct="false">A. III e IV, apenas.</button>
-        <button data-correct="false">B. II e IV, apenas.</button>
-        <button data-correct="false">C. I, apenas.</button>
-        <button data-correct="false">D. I, II e III, apenas.</button>
-        <button data-correct="true">E. I, II, III e IV.</button>
+        <button data-correct="false">1. As asserções I e II são proposições falsas.</button>
+        <button data-correct="false">2. A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.</button>
+        <button data-correct="false">3. A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.</button>
+        <button data-correct="true">4. As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.</button>
+        <button data-correct="false">5. As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.</button>
     </div>
-    
+
     <p class="feedback"></p>
 </div>
 
-<!-- Quiz 5 -->
+<!-- Quiz sobre métodos de conservação de alimentos -->
 <div class="quiz-container">
-    <h2>5. Avançando na história, J. Arthur Harris e Francis G. Benedict, em 1919, a partir de uma grande análise com 333 indivíduos, deduziram as primeiras equações de predição da Taxa Metabólica Basal (TMB) em homens, mulheres e crianças. Nesse estudo, todos os participantes eram saudáveis, sem sinais de febre e após o período pós-prandial, no momento da aferição, o indivíduo deveria se manter em completo repouso (Paviani et al. 2023).
-    <br><br>
-    Fonte: PAVIANI, L.; PEREIRA, N. S. Nutrição Humana. Indaial: UniCesumar, 2023.
-    <br><br>
-    Considerando-se esse contexto, qual é a definição correta de taxa metabólica basal (TMB)?</h2>
+    <h2>
+        4- Os alimentos são todas substâncias ou mistura de substâncias, no estado sólido, líquido ou pastoso ou de qualquer outra forma adequada, destinados a fornecer ao organismo humano os elementos normais à sua formação, manutenção e desenvolvimento. Em todas as fases de seu processamento, os alimentos estão suscetíveis a processos deteriorantes e de contaminação, causadas principalmente por microrganismos, enzimas e reações do oxigênio com o ar, modificando suas estruturas primárias. Neste sentido, torna-se fundamental a utilização de conceitos da tecnologia de alimentos, que estuda métodos e processos que possam aumentar a disponibilidade de alimentos e a sua “vida de prateleira”, sem abdicar da qualidade.
+        <br><br>
+        Fonte: VASCONCELOS, Margarida Angélica da Silva; MELO, Filho Artur Bibiano de. Conservação de alimentos. e-TEC Brasil. Escola Técnica Aberta do Brasil, 2016.
+        <br><br>
+        Considerando os métodos de conservação de alimentos, assinale a alternativa correta:
+    </h2>
     
     <div class="answers">
-        <button data-correct="false">A. A TMB é a quantidade de energia necessária para realizar uma refeição completa.</button>
-        <button data-correct="true">B. A TMB é a energia gasta durante o repouso físico e mental, sem exercícios intensos no dia anterior.</button>
-        <button data-correct="false">C. A TMB é a energia que as células utilizam durante atividades intensas.</button>
-        <button data-correct="false">D. A TMB é a energia utilizada durante o sono profundo.</button>
-        <button data-correct="false">E. A TMB é a energia necessária para realizar atividades físicas moderadas.</button>
+        <button data-correct="false">1. A fermentação são as modificações não intencionais dos alimentos.</button>
+        <button data-correct="false">2. A salga tem a finalidade de secagem natural, artificial e a desidratação.</button>
+        <button data-correct="false">3. A defumação implica na conservação com o uso do sal, sendo utilizada para conservar carnes como o Jerked beef.</button>
+        <button data-correct="false">4. A desidratação envolve o aumento da quantidade de água do alimento, impedindo a proliferação dos microorganismos.</button>
+        <button data-correct="true">5. O uso de aditivos consiste na adição de substâncias aos alimentos, visando conservar, melhorar a cor, o aroma, a textura, o sabor e o valor nutritivo.</button>
     </div>
-    
+
     <p class="feedback"></p>
 </div>
 
-<!-- Quiz 6 -->
+<!-- Quiz sobre legislação, conservação e comercialização dos ovos -->
 <div class="quiz-container">
-    <h2>6. Os lipídios, também conhecidos como gorduras, são macronutrientes importantes para o desenvolvimento do organismo, pois possuem funções estruturais, participam de reações químicas e de transportes. Eles representam grande reserva energética, armazenada no tecido adiposo. Na dieta são consumidas gorduras saturadas e insaturadas.
-    <br><br>
-    Fonte: PAVIANI, L.; PEREIRA, N. da S. Nutrição Humana. Indaial: Arqué, 2023.
-    <br><br>
-    Com base nas respostas metabólicas relativas ao consumo de gorduras, avalie as asserções a seguir e a relação proposta entre elas:
-    <br><br>
-    I. Para evitar riscos à saúde, o consumo de gordura insaturada na dieta deve ser limitado, não atingindo 10% do total recomendado da ingestão de lipídios.
-    <br>
-    **PORQUE**
-    <br>
-    II. O consumo de gordura insaturada está relacionado ao aumento de HDL-colesterol, que apresenta papel protetor para a saúde cardiovascular.
-    <br><br>
-    A respeito dessas asserções, assinale a opção correta:</h2>
+    <h2>
+        5- O ovo apresenta a maior quantidade de nutrientes essenciais totais à nutrição humana, em relação ao seu conteúdo calórico, quando comparado com qualquer outro alimento. Embora muitos acreditassem que o ovo era prejudicial à saúde, devido ao alto colesterol, pesquisas recentes comprovaram que tal alimento, pelo contrário, é benéfico à saúde se consumido de forma adequada.
+        <br><br>
+        Fonte: OLIVEIRA, A. Comercialização de ovos: classificação, rótulo, identificação e embalagens. Cursos CPT, 2019. Disponível em: <a href="https://bit.ly/2mvDFj7" target="_blank">https://bit.ly/2mvDFj7</a>. Acesso em: 20 de agosto de 2019.
+        <br><br>
+        Considerando a legislação, conservação e comercialização dos ovos, analise as afirmações a seguir:
+        <br><br>
+        I. Os ovos in natura, devem ser conservados sob refrigeração, à temperatura entre 20ºC e 30ºC.
+        <br>
+        II. O ovo integral pasteurizado desidratado é uma das melhores formas de comercialização para as UANs (Unidade de Alimentação e Nutrição).
+        <br>
+        III. A Salmonella sp é uma bactéria transmitida pela ingestão de alimentos contaminados com fezes animais, sendo que o cozimento do ovo mata a Salmonella.
+        <br>
+        IV. O ovo integral líquido pasteurizado não é adequado para a comercialização em indústrias de massas, pães, bolos, entre outras.
+        <br><br>
+        É correto o que se afirma em:
+    </h2>
     
     <div class="answers">
-        <button data-correct="false">A. As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.</button>
-        <button data-correct="false">B. As asserções I e II são proposições falsas.</button>
-        <button data-correct="true">C. A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.</button>
-        <button data-correct="false">D. As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.</button>
-        <button data-correct="false">E. A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.</button>
+        <button data-correct="false">1. I e II, apenas.</button>
+        <button data-correct="false">2. I, II e IV, apenas.</button>
+        <button data-correct="true">3. II e III, apenas.</button>
+        <button data-correct="false">4. II, III e IV, apenas.</button>
+        <button data-correct="false">5. I, II e III, apenas.</button>
     </div>
-    
+
     <p class="feedback"></p>
 </div>
 
+<!-- Quiz sobre operações preliminares no pré-preparo de alimentos -->
+<div class="quiz-container">
+    <h2>
+        6- Operações preliminares são aquelas unitárias realizadas antes de qualquer outra operação, com o objetivo de preparar o alimento para um processamento posterior ou para melhorar o estado sanitário da matéria-prima. Elas têm como finalidade, melhorar o aspecto do produto, diminuir o número de microrganismos, homogeneizar as matérias-primas, além de retirar elementos desnecessários ao processamento.
+        <br><br>
+        Fonte: PHILIPPI, S. T. Nutrição e técnica dietética. 3ª edição. Revisada e ampliada. Barueri-SP: Editora Manole, 2014, 424 p. Acesso em: 11 set. 2023. (adaptado).
+        <br><br>
+        Considerando as operações de pré-preparo e a utilização da técnica de subdivisão dos alimentos, assinale a alternativa correta, quanto a separação de duas partes sólidas de um mesmo alimento:
+    </h2>
+    
+    <div class="answers">
+        <button data-correct="false">1. Trituração.</button>
+        <button data-correct="false">2. Destilação.</button>
+        <button data-correct="true">3. Tamisação.</button>
+        <button data-correct="false">4. Decantação.</button>
+        <button data-correct="false">5. Centrifugação.</button>
+    </div>
 
-    <!-- (Continue com os demais quizzes, adicionando data-correct aos botões conforme apropriado) -->
+    <p class="feedback"></p>
+</div>
+
+<!-- Quiz sobre desperdício de alimentos e Fator de Correção (FC) -->
+<div class="quiz-container">
+    <h2>
+        7- O desperdício de alimentos é definido como o descarte intencional de produtos alimentícios apropriados para o consumo humano, sendo decorrente, portanto, do próprio comportamento dos indivíduos. O desperdício ocorre quando alimentos que não estão estragados, ou seja, ainda estariam aptos para o consumo, são jogados fora por estarem com uma aparência desagradável, por serem considerados feios, deformados ou fora do padrão.
+        <br><br>
+        Fonte: Freire Junior, M., & Soares, A. G. (2017). Redução do desperdício de alimentos. Embrapa. <a href="https://ainfo.cnptia.embrapa.br/digital/bitstream/item/164602/1/Foler-CGPE-13931.pdf" target="_blank">https://ainfo.cnptia.embrapa.br/digital/bitstream/item/164602/1/Foler-CGPE-13931.pdf</a>
+        <br>Acesso em: 06 de set. 2023.
+        <br><br>
+        Considerando os fatores relacionados ao desperdício de alimentos, analise as afirmações a seguir:
+        <br><br>
+        I. O Fator de Correção (FC) foi estabelecido para determinar a quantidade a ser comprada e avaliar o preço total de compra de alimentos, principalmente aqueles que apresentaram perdas inevitáveis (como cascas, aparas, sementes, etc).
+        <br>
+        II. O Fator de Correção (FC) é uma constante decorrente da relação entre Peso Bruto e Peso Líquido.
+        <br>
+        III. O Fator de Correção (FC) apresenta em sua fórmula o Peso Bruto, como sendo o alimento depois de limpo e preparado para ser utilizado e, o Peso Líquido, como aquele alimento conforme é adquirido, a ser posteriormente utilizado.
+        <br>
+        IV. O Fator de Correção (FC) é apresentado na seguinte fórmula: FC = Peso Líquido, dividido pelo Peso Bruto.
+        <br><br>
+        É correto o que se afirma em:
+    </h2>
+    
+    <div class="answers">
+        <button data-correct="false">1. I, apenas.</button>
+        <button data-correct="true">2. I e II, apenas.</button>
+        <button data-correct="false">3. II e III, apenas.</button>
+        <button data-correct="false">4. III e IV, apenas.</button>
+        <button data-correct="false">5. I, II, III e IV.</button>
+    </div>
+
+    <p class="feedback"></p>
+</div>
+
+<!-- Quiz sobre Fator de Cocção (FCc) da linguiça -->
+<div class="quiz-container">
+    <h2>
+        8- Os locais onde são realizadas refeições de todos os tipos, devem estar de acordo com as normas e boas práticas de fabricação, fornecendo para o comensal uma alimentação equilibrada e padronizada, a fim de manter o bem estar e a saúde dos clientes. Grande parte dos insumos utilizados na preparação do cardápio não está devidamente pronta para o uso e necessita ser manipulada, resultando em perdas que precisam ser consideradas no cálculo dos custos. O dono do estabelecimento paga pela quantidade total do produto, mas parte dela acaba sendo eliminada durante o pré-preparo da receita e por isso, deve-se registrar essas perdas e considerá-las.
+        <br><br>
+        Fonte: A importância da ficha técnica em uma unidade de alimentação e nutrição. Disponível em: <a href="https://bit.ly/2oz86FP" target="_blank">https://bit.ly/2oz86FP</a>. Acesso em: 20 de ago. 2023.
+        <br><br>
+        Sabe-se que o Fator de Cocção (FCc) é a relação entre o peso do alimento cozido e o peso do alimento cru, expressa através de uma constante. José comprou 2400g de linguiça. Após a cocção na churrasqueira, essa linguiça foi pesada e apresentou 2120g. Considerando a situação hipotética é correto que se afirma em:
+        <br><br>
+        I. O fator de cocção da linguiça é 1,05, apresentando um bom rendimento.
+        <br>
+        II. Ao passar pelo processo de cocção na churrasqueira a linguiça perdeu água, fazendo seu rendimento ser menor que seu peso inicial.
+        <br>
+        III. Os cálculos do fator de cocção da linguiça foi de 0,88, apresentando baixo rendimento.
+        <br>
+        IV. Para calcular o rendimento da linguiça deve-se pica-la em um processador de carne para que o seu fator de cocção seja real.
+        <br><br>
+        É correto o que se afirma em:
+    </h2>
+    
+    <div class="answers">
+        <button data-correct="false">1. I e II, apenas.</button>
+        <button data-correct="true">2. II e III, apenas.</button>
+        <button data-correct="false">3. I, II e III, apenas.</button>
+        <button data-correct="false">4. I, II e IV, apenas.</button>
+        <button data-correct="false">5. II, III e IV, apenas.</button>
+    </div>
+
+    <p class="feedback"></p>
+</div>
+
+<!-- Quiz sobre carne e propriedades de cocção -->
+<div class="quiz-container">
+    <h2>
+        9- A respeito da carne, leia o texto a seguir:
+        <br><br>
+        A carne é a denominação dada ao tecido muscular esquelético ou liso, após a morte do animal, própria para consumo, e que já passou por todo um processo de estabilização e maturação. Carnes são todas as partes comestíveis do animal, apresentando três tipos de estrutura na sua composição: os tecidos musculares, conjuntivos e adiposos além de ossos e cartilagens. São fontes de proteínas, minerais, vitaminas e o teor de lipídeos é diferente entre os cortes e os tipos de carne.
+        <br><br>
+        Fonte: BRACCINI, Graciela Lucca. Técnica Dietética. Maringá-PR: Unicesumar, 2018.
+        <br><br>
+        Considerando as informações acima, avalie as asserções a seguir e a relação proposta entre elas:
+        <br><br>
+        I. O aumento da concentração de proteínas estromáticas, como colágeno e elastina, contribuem para aumentar a dureza e diminuir a suculência da carne.
+        <br><br>
+        PORQUE
+        <br><br>
+        II. O processo de cocção (cozimento) pode ocasionar a desnaturação das proteínas da carne, diminuindo a disponibilidade das mesmas e interferindo na textura do alimento.
+        <br><br>
+        A respeito dessas asserções, assinale a opção correta:
+    </h2>
+    
+    <div class="answers">
+        <button data-correct="false">1. As asserções I e II são proposições falsas.</button>
+        <button data-correct="false">2. A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.</button>
+        <button data-correct="false">3. A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.</button>
+        <button data-correct="false">4. As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.</button>
+        <button data-correct="true">5. As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.</button>
+    </div>
+
+    <p class="feedback"></p>
+</div>
+
+<!-- Quiz sobre métodos sensoriais e preparação técnica dos alimentos -->
+<div class="quiz-container">
+    <h2>
+        10- Os métodos sensoriais permitem a detecção, a descrição e a quantificação dos atributos sensoriais presentes em um alimento. Estes métodos são utilizados pela indústria de alimentos no desenvolvimento de novos produtos, no controle de qualidade, nas alterações de ingredientes e/ou formulações e na avaliação de produtos durante a estocagem.
+        <br><br>
+        Fonte: ALCANTARA, M. de; FREITAS-SÁ, D. de G. C. Metodologias sensoriais descritivas mais rápidas e versáteis: uma atualidade na ciência sensorial. Brazilian Journal of Food Technology, v. 21, 2018. Disponível em: <a href="https://www.scielo.br/j/bjft/a/D9JsdtYYvNhWHPxfYWPLgBL/?lang=pt" target="_blank">https://www.scielo.br/j/bjft/a/D9JsdtYYvNhWHPxfYWPLgBL/?lang=pt</a>. Acesso em: 04 out. 2021.
+        <br><br>
+        Considerando os objetivos da preparação técnica dos alimentos, analise as afirmações a seguir:
+        <br><br>
+        I. Estatístico corresponde à organização e preparação dos espaços físicos, materiais, utensílios e equipamentos, planejando o cardápio e capacitando a mão de obra para a correta execução da preparação.
+        <br>
+        II. Sensorial, consiste em apresentar o alimento, aos consumidores, de forma que desperte todos os sentidos.
+        <br>
+        III. Digestivo consiste em modificar os alimentos por meio de processos culinários, a fim de facilitar a digestão.
+        <br>
+        IV. Nutritivo fundamenta-se na preservação dos nutrientes para a promoção da saúde.
+        <br><br>
+        É correto o que se afirma em:
+    </h2>
+    
+    <div class="answers">
+        <button data-correct="false">1. I e III, apenas.</button>
+        <button data-correct="false">2. II e IV, apenas.</button>
+        <button data-correct="true">3. III e IV, apenas.</button>
+        <button data-correct="false">4. II, III e IV, apenas.</button>
+        <button data-correct="false">5. I, II, III e IV.</button>
+    </div>
+
+    <p class="feedback"></p>
+</div>
 
     <button class="print-btn" onclick="window.print()">Imprimir Quiz</button>
 
     <script>
         function checkAnswer(button) {
+            const answerContainer = button.closest('.answers');
+            const quizContainer = button.closest('.quiz-container');
             const isCorrect = button.getAttribute('data-correct') === 'true';
-            const allButtons = button.closest('.answers').querySelectorAll('button');
+            const allButtons = answerContainer.querySelectorAll('button');
+            const correctButton = answerContainer.querySelector('button[data-correct="true"]');
+            const feedback = quizContainer.querySelector('.feedback');
+
             allButtons.forEach(btn => {
                 btn.disabled = true;
                 btn.classList.remove('correct', 'incorrect');
-                if (btn.getAttribute('data-correct') === 'true') {
+                if (btn === correctButton) {
                     btn.classList.add('correct');
                 }
             });
 
-            const feedback = button.closest('.quiz-container').querySelector('.feedback');
-            feedback.style.display = 'block';
-
+            feedback.classList.add('visible');
             if (isCorrect) {
                 feedback.textContent = "Parabéns, continue assim! Você vai muito bem na prova. 🎉";
                 feedback.classList.add('correct');
                 feedback.classList.remove('incorrect');
             } else {
                 button.classList.add('incorrect');
-                // Encontrar a resposta correta
-                const correctButton = button.closest('.answers').querySelector('button[data-correct="true"]');
                 if (correctButton) {
                     feedback.innerHTML = `Vamos tentar novamente na próxima. 😔<br>A resposta correta é: <strong>${correctButton.textContent}</strong>`;
                 } else {
@@ -278,13 +418,11 @@ De acordo com as classificações dos carboidratos, avalie as asserções:</h2>
             }
         }
 
-        // Adicionar event listeners após o carregamento da página
         document.addEventListener('DOMContentLoaded', () => {
-            const answerButtons = document.querySelectorAll('.answers button');
-            answerButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    checkAnswer(this);
-                });
+            document.body.addEventListener('click', function(event) {
+                if (event.target.matches('.answers button')) {
+                    checkAnswer(event.target);
+                }
             });
         });
     </script>
