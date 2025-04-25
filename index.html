@@ -1,1385 +1,244 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz sobre Nutrição Humana</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz sobre Processamento Tecnológico do Leite</title>
+  <style>
+    /* Reset básico */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Roboto', sans-serif; background: #f5f5f5; }
 
-        .quiz-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            margin-bottom: 20px;
-        }
+    /* Overlay de acesso */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .overlay .modal {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      width: 90%; max-width: 420px;
+      text-align: center;
+      animation: fadeIn 0.3s ease-out;
+    }
 
-        h2 {
-            text-align: justify;
-            color: #2c3e50;
-            font-weight: bold;
-            font-size: 18px;
-            line-height: 1.6;
-        }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        .answers button {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            background-color: #f0f0f0;
-            cursor: pointer;
-            text-align: left;
-        }
+    .overlay h3 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      color: #2c3e50;
+    }
+    .overlay p {
+      font-size: 1rem;
+      margin: 8px 0;
+      color: #555;
+    }
+    .overlay p strong {
+      color: #2c3e50;
+    }
+    .overlay input {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 16px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    .overlay input:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+    .overlay button {
+      margin-top: 16px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #3498db;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .overlay button:hover {
+      background: #2980b9;
+    }
+    .overlay .feedback {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: #e74c3c;
+      min-height: 1.2em;
+    }
 
-        .answers button:hover {
-            background-color: #dcdcdc;
-        }
+    /* Conteúdo do quiz (inicialmente escondido) */
+    #quiz-content {
+      display: none;
+      padding: 20px;
+      max-width: 800px;
+      margin: 60px auto;
+    }
 
-        .answers button.correct {
-            background-color: #4CAF50;
-            border-color: #4CAF50;
-            color: white;
-        }
+    /* Estilos do quiz */
+    .quiz-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .quiz-container h2 {
+      color: #2c3e50;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .answers button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      font-size: 0.95rem;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      background: #f8f8f8;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .answers button:hover {
+      background: #ececec;
+    }
+    .answers button.correct {
+      background: #2ecc71;
+      border-color: #27ae60;
+      color: #fff;
+    }
+    .answers button.incorrect {
+      background: #e74c3c;
+      border-color: #c0392b;
+      color: #fff;
+    }
+    .feedback {
+      font-size: 0.95rem;
+      margin-top: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .feedback.visible {
+      opacity: 1;
+    }
+    .feedback.correct {
+      color: #2ecc71;
+    }
+    .feedback.incorrect {
+      color: #e74c3c;
+    }
 
-        .answers button.incorrect {
-            background-color: #e74c3c;
-            border-color: #e74c3c;
-            color: white;
-        }
-
-        .feedback {
-            font-size: 18px;
-            margin-top: 10px;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .feedback.visible {
-            opacity: 1;
-        }
-
-        .feedback.correct {
-            color: #4CAF50;
-        }
-
-        .feedback.incorrect {
-            color: #e74c3c;
-        }
-
-        .print-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .print-btn:hover {
-            background-color: #2980b9;
-        }
-
-        @media (max-width: 600px) {
-            .quiz-container {
-                padding: 10px;
-            }
-            .answers button {
-                font-size: 14px;
-                padding: 8px;
-            }
-            .print-btn {
-                padding: 8px 16px;
-            }
-        }
-    </style>
+    /* Botão de imprimir */
+    .print-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .print-btn:hover {
+      background: #2980b9;
+    }
+  </style>
 </head>
 <body>
 
+  <!-- Overlay de acesso -->
+  <div class="overlay" id="access-overlay">
+    <div class="modal">
+      <h3>Nutri Nerd aqui!</h3>
+      <p>Continuando ajudando cada vez mais vocês.</p>
+      <p>Colabore com <strong>R$ 7,00</strong> via PIX para manter as ferramentas:</p>
+      <p><strong>PIX:</strong> julianohs881@gmail.com</p>
+      <p><strong>WhatsApp:</strong> 44 99914-5291 (envie o comprovante)</p>
+      <p>Depois, insira o código de acesso:</p>
+      <input type="text" id="access-code" placeholder="Digite 232524">
+      <button id="btn-submit-code">Validar</button>
+      <div class="feedback" id="access-feedback"></div>
+    </div>
+  </div>
+
+  <!-- Conteúdo do quiz -->
+  <div id="quiz-content">
+
+    <!-- Quiz sobre processamento tecnológico do leite -->
     <div class="quiz-container">
-    <h2>
-        01-O consumo de alimentos fritos vem crescendo nos últimos anos, sua ingestão pode se tornar perigosa quando no preparo são utilizados óleos de má qualidade. Durante a fritura por imersão de alimentos, podem ocorrer diversas alterações físicas e químicas no óleo, influenciando nos produtos destinados ao consumo. Diante disto, torna-se importante analisar a qualidade dos óleos utilizados para frituras em Unidades Produtoras de Refeições.
-        <br><br>
-        Fonte: DIJULI, Deise Aparecida da Silva et al. Processos de fritura em escala laboratorial e industrial para estabelecer procedimentos de boas práticas. 2021. Dissertação de Mestrado. Universidade Tecnológica Federal do Paraná.
-        <br><br>
-        Considerando o assunto e os estudos sobre óleos e gorduras na técnica e dietética, assinale a alternativa correta.
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. Os óleos e as gorduras são sólidos à temperatura ambiente.</button>
-        <button data-correct="false">2. Durante o aquecimento em altas temperaturas, o glicerol é liberado em forma de fumaça branca.</button>
-        <button data-correct="false">3. Na fritura dos alimentos é indicada a escolha de um óleo com menor resistência a altas temperaturas.</button>
-        <button data-correct="false">4. O azeite de oliva de todos os tipos de gordura é o que possui a maior temperatura do ponto de fumaça no tempo de 7 minutos de aquecimento.</button>
-        <button data-correct="true">5. A fumaça branca e densa liberada na hidrólise das gorduras pode ser observada a olho nu e esta alteração física é conhecida como ponto de fumaça.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-<!-- Quiz sobre cálculo de compras para salada de cenoura -->
-<div class="quiz-container">
-    <h2>
-        2-O cardápio do almoço de sexta-feira de uma Unidade Produtora de Refeições inclui uma preparação de salada de cenoura crua. A nutricionista da unidade precisa fazer o pedido de compras para essa preparação. A mesma sabe que nesta unidade almoçam diariamente 120 funcionários, que o per capita dessa preparação é de 150 g e que o fator de correção (FC) dessa cenoura é 2.
-        <br><br>
-        Elaborado pelo professor, 2023.
-        <br><br>
-        Assinale a alternativa que apresenta quantos quilos dessa cenoura ela precisa comprar para servir a preparação para 120 pessoas:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. 34 kg.</button>
-        <button data-correct="true">2. 36 kg.</button>
-        <button data-correct="false">3. 40 kg.</button>
-        <button data-correct="false">4. 360 kg.</button>
-        <button data-correct="false">5. 36.000 kg.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<!-- Quiz sobre processamento tecnológico do leite -->
-<div class="quiz-container">
-    <h2>
-        3- No vasto mercado global de leite, a segurança do alimento é o mais importante. O processo térmico realizado no leite precisa ser estéril, e não há nenhum espaço para erros. Os consumidores de hoje estão mais conscientes sobre segurança do que nunca, e por isso é tão importante saber que as matérias-primas, equipamentos de produção e rotinas atendem aos padrões de higiene mais altos possíveis.
-        <br><br>
-        Disponível em: <a href="https://bit.ly/2muQV7C" target="_blank">https://bit.ly/2muQV7C</a>. Acesso em: 20 de ago. 2023.
-        <br><br>
-        Considerando as informações acima e o que foi estudado na disciplina a respeito do processamento tecnológico do leite, avalie as asserções a seguir e a relação proposta entre elas:
-        <br><br>
-        I. O tratamento UHT, Ultra High Temperature, elimina todos os microrganismos patogênicos viáveis no produto final, justificando o seu armazenamento em temperatura ambiente.
-        <br><br>
-        PORQUE
-        <br><br>
-        II. O processo de Uperização ou Ultrapasteurização realiza o aquecimento do leite à temperatura de aproximadamente 150ºC, por cerca de quatro segundos, seguido por um rápido resfriamento, até uma temperatura menor que 32°C.
-        <br><br>
-        A respeito dessas asserções, assinale a opção correta:
-    </h2>
-    
-    <div class="answers">
+      <h2>
+        3- No vasto mercado global de leite, a segurança do alimento é o mais importante...
+      </h2>
+      <div class="answers">
         <button data-correct="false">1. As asserções I e II são proposições falsas.</button>
         <button data-correct="false">2. A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.</button>
         <button data-correct="false">3. A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.</button>
         <button data-correct="true">4. As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.</button>
         <button data-correct="false">5. As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.</button>
+      </div>
+      <p class="feedback"></p>
     </div>
-
-    <p class="feedback"></p>
-</div>
-
-<!-- Quiz sobre métodos de conservação de alimentos -->
-<div class="quiz-container">
-    <h2>
-        4- Os alimentos são todas substâncias ou mistura de substâncias, no estado sólido, líquido ou pastoso ou de qualquer outra forma adequada, destinados a fornecer ao organismo humano os elementos normais à sua formação, manutenção e desenvolvimento. Em todas as fases de seu processamento, os alimentos estão suscetíveis a processos deteriorantes e de contaminação, causadas principalmente por microrganismos, enzimas e reações do oxigênio com o ar, modificando suas estruturas primárias. Neste sentido, torna-se fundamental a utilização de conceitos da tecnologia de alimentos, que estuda métodos e processos que possam aumentar a disponibilidade de alimentos e a sua “vida de prateleira”, sem abdicar da qualidade.
-        <br><br>
-        Fonte: VASCONCELOS, Margarida Angélica da Silva; MELO, Filho Artur Bibiano de. Conservação de alimentos. e-TEC Brasil. Escola Técnica Aberta do Brasil, 2016.
-        <br><br>
-        Considerando os métodos de conservação de alimentos, assinale a alternativa correta:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. A fermentação são as modificações não intencionais dos alimentos.</button>
-        <button data-correct="false">2. A salga tem a finalidade de secagem natural, artificial e a desidratação.</button>
-        <button data-correct="false">3. A defumação implica na conservação com o uso do sal, sendo utilizada para conservar carnes como o Jerked beef.</button>
-        <button data-correct="false">4. A desidratação envolve o aumento da quantidade de água do alimento, impedindo a proliferação dos microorganismos.</button>
-        <button data-correct="true">5. O uso de aditivos consiste na adição de substâncias aos alimentos, visando conservar, melhorar a cor, o aroma, a textura, o sabor e o valor nutritivo.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<!-- Quiz sobre legislação, conservação e comercialização dos ovos -->
-<div class="quiz-container">
-    <h2>
-        5- O ovo apresenta a maior quantidade de nutrientes essenciais totais à nutrição humana, em relação ao seu conteúdo calórico, quando comparado com qualquer outro alimento. Embora muitos acreditassem que o ovo era prejudicial à saúde, devido ao alto colesterol, pesquisas recentes comprovaram que tal alimento, pelo contrário, é benéfico à saúde se consumido de forma adequada.
-        <br><br>
-        Fonte: OLIVEIRA, A. Comercialização de ovos: classificação, rótulo, identificação e embalagens. Cursos CPT, 2019. Disponível em: <a href="https://bit.ly/2mvDFj7" target="_blank">https://bit.ly/2mvDFj7</a>. Acesso em: 20 de agosto de 2019.
-        <br><br>
-        Considerando a legislação, conservação e comercialização dos ovos, analise as afirmações a seguir:
-        <br><br>
-        I. Os ovos in natura, devem ser conservados sob refrigeração, à temperatura entre 20ºC e 30ºC.
-        <br>
-        II. O ovo integral pasteurizado desidratado é uma das melhores formas de comercialização para as UANs (Unidade de Alimentação e Nutrição).
-        <br>
-        III. A Salmonella sp é uma bactéria transmitida pela ingestão de alimentos contaminados com fezes animais, sendo que o cozimento do ovo mata a Salmonella.
-        <br>
-        IV. O ovo integral líquido pasteurizado não é adequado para a comercialização em indústrias de massas, pães, bolos, entre outras.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. I e II, apenas.</button>
-        <button data-correct="false">2. I, II e IV, apenas.</button>
-        <button data-correct="true">3. II e III, apenas.</button>
-        <button data-correct="false">4. II, III e IV, apenas.</button>
-        <button data-correct="false">5. I, II e III, apenas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<!-- Quiz sobre operações preliminares no pré-preparo de alimentos -->
-<div class="quiz-container">
-    <h2>
-        6- Operações preliminares são aquelas unitárias realizadas antes de qualquer outra operação, com o objetivo de preparar o alimento para um processamento posterior ou para melhorar o estado sanitário da matéria-prima. Elas têm como finalidade, melhorar o aspecto do produto, diminuir o número de microrganismos, homogeneizar as matérias-primas, além de retirar elementos desnecessários ao processamento.
-        <br><br>
-        Fonte: PHILIPPI, S. T. Nutrição e técnica dietética. 3ª edição. Revisada e ampliada. Barueri-SP: Editora Manole, 2014, 424 p. Acesso em: 11 set. 2023. (adaptado).
-        <br><br>
-        Considerando as operações de pré-preparo e a utilização da técnica de subdivisão dos alimentos, assinale a alternativa correta, quanto a separação de duas partes sólidas de um mesmo alimento:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. Trituração.</button>
-        <button data-correct="false">2. Destilação.</button>
-        <button data-correct="true">3. Tamisação.</button>
-        <button data-correct="false">4. Decantação.</button>
-        <button data-correct="false">5. Centrifugação.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<!-- Quiz sobre desperdício de alimentos e Fator de Correção (FC) -->
-<div class="quiz-container">
-    <h2>
-        7- O desperdício de alimentos é definido como o descarte intencional de produtos alimentícios apropriados para o consumo humano, sendo decorrente, portanto, do próprio comportamento dos indivíduos. O desperdício ocorre quando alimentos que não estão estragados, ou seja, ainda estariam aptos para o consumo, são jogados fora por estarem com uma aparência desagradável, por serem considerados feios, deformados ou fora do padrão.
-        <br><br>
-        Fonte: Freire Junior, M., & Soares, A. G. (2017). Redução do desperdício de alimentos. Embrapa. <a href="https://ainfo.cnptia.embrapa.br/digital/bitstream/item/164602/1/Foler-CGPE-13931.pdf" target="_blank">https://ainfo.cnptia.embrapa.br/digital/bitstream/item/164602/1/Foler-CGPE-13931.pdf</a>
-        <br>Acesso em: 06 de set. 2023.
-        <br><br>
-        Considerando os fatores relacionados ao desperdício de alimentos, analise as afirmações a seguir:
-        <br><br>
-        I. O Fator de Correção (FC) foi estabelecido para determinar a quantidade a ser comprada e avaliar o preço total de compra de alimentos, principalmente aqueles que apresentaram perdas inevitáveis (como cascas, aparas, sementes, etc).
-        <br>
-        II. O Fator de Correção (FC) é uma constante decorrente da relação entre Peso Bruto e Peso Líquido.
-        <br>
-        III. O Fator de Correção (FC) apresenta em sua fórmula o Peso Bruto, como sendo o alimento depois de limpo e preparado para ser utilizado e, o Peso Líquido, como aquele alimento conforme é adquirido, a ser posteriormente utilizado.
-        <br>
-        IV. O Fator de Correção (FC) é apresentado na seguinte fórmula: FC = Peso Líquido, dividido pelo Peso Bruto.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. I, apenas.</button>
-        <button data-correct="true">2. I e II, apenas.</button>
-        <button data-correct="false">3. II e III, apenas.</button>
-        <button data-correct="false">4. III e IV, apenas.</button>
-        <button data-correct="false">5. I, II, III e IV.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<!-- Quiz sobre Fator de Cocção (FCc) da linguiça -->
-<div class="quiz-container">
-    <h2>
-        8- Os locais onde são realizadas refeições de todos os tipos, devem estar de acordo com as normas e boas práticas de fabricação, fornecendo para o comensal uma alimentação equilibrada e padronizada, a fim de manter o bem estar e a saúde dos clientes. Grande parte dos insumos utilizados na preparação do cardápio não está devidamente pronta para o uso e necessita ser manipulada, resultando em perdas que precisam ser consideradas no cálculo dos custos. O dono do estabelecimento paga pela quantidade total do produto, mas parte dela acaba sendo eliminada durante o pré-preparo da receita e por isso, deve-se registrar essas perdas e considerá-las.
-        <br><br>
-        Fonte: A importância da ficha técnica em uma unidade de alimentação e nutrição. Disponível em: <a href="https://bit.ly/2oz86FP" target="_blank">https://bit.ly/2oz86FP</a>. Acesso em: 20 de ago. 2023.
-        <br><br>
-        Sabe-se que o Fator de Cocção (FCc) é a relação entre o peso do alimento cozido e o peso do alimento cru, expressa através de uma constante. José comprou 2400g de linguiça. Após a cocção na churrasqueira, essa linguiça foi pesada e apresentou 2120g. Considerando a situação hipotética é correto que se afirma em:
-        <br><br>
-        I. O fator de cocção da linguiça é 1,05, apresentando um bom rendimento.
-        <br>
-        II. Ao passar pelo processo de cocção na churrasqueira a linguiça perdeu água, fazendo seu rendimento ser menor que seu peso inicial.
-        <br>
-        III. Os cálculos do fator de cocção da linguiça foi de 0,88, apresentando baixo rendimento.
-        <br>
-        IV. Para calcular o rendimento da linguiça deve-se pica-la em um processador de carne para que o seu fator de cocção seja real.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. I e II, apenas.</button>
-        <button data-correct="true">2. II e III, apenas.</button>
-        <button data-correct="false">3. I, II e III, apenas.</button>
-        <button data-correct="false">4. I, II e IV, apenas.</button>
-        <button data-correct="false">5. II, III e IV, apenas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<!-- Quiz sobre carne e propriedades de cocção -->
-<div class="quiz-container">
-    <h2>
-        9- A respeito da carne, leia o texto a seguir:
-        <br><br>
-        A carne é a denominação dada ao tecido muscular esquelético ou liso, após a morte do animal, própria para consumo, e que já passou por todo um processo de estabilização e maturação. Carnes são todas as partes comestíveis do animal, apresentando três tipos de estrutura na sua composição: os tecidos musculares, conjuntivos e adiposos além de ossos e cartilagens. São fontes de proteínas, minerais, vitaminas e o teor de lipídeos é diferente entre os cortes e os tipos de carne.
-        <br><br>
-        Fonte: BRACCINI, Graciela Lucca. Técnica Dietética. Maringá-PR: Unicesumar, 2018.
-        <br><br>
-        Considerando as informações acima, avalie as asserções a seguir e a relação proposta entre elas:
-        <br><br>
-        I. O aumento da concentração de proteínas estromáticas, como colágeno e elastina, contribuem para aumentar a dureza e diminuir a suculência da carne.
-        <br><br>
-        PORQUE
-        <br><br>
-        II. O processo de cocção (cozimento) pode ocasionar a desnaturação das proteínas da carne, diminuindo a disponibilidade das mesmas e interferindo na textura do alimento.
-        <br><br>
-        A respeito dessas asserções, assinale a opção correta:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. As asserções I e II são proposições falsas.</button>
-        <button data-correct="false">2. A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.</button>
-        <button data-correct="false">3. A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.</button>
-        <button data-correct="false">4. As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.</button>
-        <button data-correct="true">5. As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<!-- Quiz sobre métodos sensoriais e preparação técnica dos alimentos -->
-<div class="quiz-container">
-    <h2>
-        10- Os métodos sensoriais permitem a detecção, a descrição e a quantificação dos atributos sensoriais presentes em um alimento. Estes métodos são utilizados pela indústria de alimentos no desenvolvimento de novos produtos, no controle de qualidade, nas alterações de ingredientes e/ou formulações e na avaliação de produtos durante a estocagem.
-        <br><br>
-        Fonte: ALCANTARA, M. de; FREITAS-SÁ, D. de G. C. Metodologias sensoriais descritivas mais rápidas e versáteis: uma atualidade na ciência sensorial. Brazilian Journal of Food Technology, v. 21, 2018. Disponível em: <a href="https://www.scielo.br/j/bjft/a/D9JsdtYYvNhWHPxfYWPLgBL/?lang=pt" target="_blank">https://www.scielo.br/j/bjft/a/D9JsdtYYvNhWHPxfYWPLgBL/?lang=pt</a>. Acesso em: 04 out. 2021.
-        <br><br>
-        Considerando os objetivos da preparação técnica dos alimentos, analise as afirmações a seguir:
-        <br><br>
-        I. Estatístico corresponde à organização e preparação dos espaços físicos, materiais, utensílios e equipamentos, planejando o cardápio e capacitando a mão de obra para a correta execução da preparação.
-        <br>
-        II. Sensorial, consiste em apresentar o alimento, aos consumidores, de forma que desperte todos os sentidos.
-        <br>
-        III. Digestivo consiste em modificar os alimentos por meio de processos culinários, a fim de facilitar a digestão.
-        <br>
-        IV. Nutritivo fundamenta-se na preservação dos nutrientes para a promoção da saúde.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. I e III, apenas.</button>
-        <button data-correct="false">2. II e IV, apenas.</button>
-        <button data-correct="false">3. III e IV, apenas.</button>
-        <button data-correct="true">4. II, III e IV, apenas.</button>
-        <button data-correct="false">5. I, II, III e IV.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<div class="quiz-container">
-    <h2>
-        11- A cocção adequada das hortaliças é essencial para preservar ao máximo seus nutrientes, garantindo que seus benefícios à saúde sejam aproveitados. Cozinhar demais pode levar à perda de vitaminas sensíveis ao calor, como a vitamina C e o ácido fólico, além de prejudicar a textura e o sabor. Métodos como o cozimento no vapor, salteado rápido ou assamento são opções que ajudam a manter a integridade nutricional, realçando o sabor natural das hortaliças.
-        <br><br>
-        Elaborado pelo professor, 2024.
-        <br><br>
-        Qual método de preparo é mais adequado para minimizar a perda de vitaminas hidrossolúveis?
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. Fritar as hortaliças em óleo para preservar suas vitaminas.</button>
-        <button data-correct="false">2. Cozinhar as hortaliças por imersão em água fervente por longos períodos.</button>
-        <button data-correct="false">3. Assar as hortaliças em forno por tempo prolongado para garantir maior concentração de nutrientes.</button>
-        <button data-correct="false">4. Cozinhar em alta pressão por um longo período para garantir a total destruição de microrganismos.</button>
-        <button data-correct="true">5. Utilizar métodos de cocção a vapor ou em curtos períodos de fervura para minimizar a perda de vitaminas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-
-    <div class="quiz-container">
-    <h2>
-      13-  A qualidade sensorial das frutas frescas é determinada por uma combinação de fatores que afetam seu sabor, aroma, textura e aparência. Elementos como o tipo de solo, clima e método de cultivo desempenham um papel fundamental na definição da doçura, acidez e suculência das frutas. O ponto de colheita também é crucial, pois frutas colhidas no auge de sua maturação tendem a ter uma qualidade superior em termos de sabor e textura.
-        <br><br>
-        ​Elaborado pelo professor, 2024.
-        <br><br>
-        Sobre o armazenamento e consumo de frutas frescas, assinale a alternativa correta:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. O processamento térmico das frutas aumenta a concentração de vitamina C.</button>
-        <button data-correct="false">2. Frutas processadas, como sucos e compotas, têm maior teor nutricional do que frutas in natura.</button>
-        <button data-correct="false">3. Frutas frescas devem ser consumidas imediatamente após a colheita para evitar perdas nutricionais.</button>
-        <button data-correct="false">4. Frutas frescas devem ser sempre armazenadas em ambientes secos para preservar suas vitaminas.</button>
-        <button data-correct="true">5. A refrigeração pode retardar o amadurecimento das frutas, preservando sua qualidade por mais tempo.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-        14- O processo de pasteurização do leite é uma etapa essencial para garantir a segurança alimentar, sendo amplamente utilizado para eliminar microrganismos patogênicos, como bactérias e vírus, que podem estar presentes no leite cru e representar riscos à saúde humana. Esse método consiste no aquecimento do leite a uma temperatura controlada por um período específico, seguido de resfriamento rápido, o que não só assegura a eliminação dos agentes nocivos, mas também preserva a maior parte dos nutrientes do leite, como proteínas, vitaminas e minerais. A pasteurização, além de aumentar a segurança do consumo, prolonga a vida útil do produto, evitando sua deterioração precoce e permitindo que o leite seja armazenado e transportado por períodos mais longos sem perder suas características.
-        <br><br>
-        LOPES, Gleicy Gomes et al. Analise da eficiência e monitoramento do processo de pasteurização do leite em indústria de laticínios na região de Rondônia. South American Journal of Basic Education, Technical and Technological, v. 5, n. 2, 2018.
-        <br><br>
-        Considerando as técnicas de pasteurização, analise as afirmativas:
-        <br><br>
-        I – A pasteurização elimina todos os microrganismos do leite.<br>
-        II – A pasteurização deve ser seguida por um rápido resfriamento para garantir a qualidade do leite.<br>
-        III – O leite UHT (ultrapasteurizado) pode ser armazenado em temperatura ambiente até a abertura da embalagem.<br>
-        IV – O processo de pasteurização compromete significativamente os nutrientes do leite.<br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. I e II, apenas.</button>
-        <button data-correct="true">2. II e III, apenas.</button>
-        <button data-correct="false">3. I, II e IV, apenas.</button>
-        <button data-correct="false">4. I, III e IV, apenas.</button>
-        <button data-correct="false">5. I, II, III e IV.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      15-  Na Técnica Dietética, os cereais são amplamente valorizados por seu papel crucial na alimentação diária, especialmente por serem fontes ricas de carboidratos complexos, que fornecem energia de maneira sustentada ao longo do dia. Além de servirem como base para muitas refeições, os cereais também são uma importante fonte de fibras, vitaminas e minerais, contribuindo para a saúde digestiva e o bom funcionamento do organismo.
-        <br><br>
-        SLAVIN, Joanne et al. Cereais integrais e saúde. 2007.
-        <br><br>
-        Em relação à principal vantagem do consumo de cereais integrais em relação aos refinados, assinale a alternativa correta.
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. Cereais integrais possuem mais calorias do que os refinados.</button>
-        <button data-correct="false">2. Cereais integrais causam mais alergias do que os refinados.</button>
-        <button data-correct="false">3. Cereais refinados preservam mais nutrientes que os integrais.</button>
-        <button data-correct="false">4. Cereais integrais são menos versáteis em preparações culinárias.</button>
-        <button data-correct="true">5. Cereais integrais contêm mais fibras, auxiliando no trânsito intestinal.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-   <div class="quiz-container">
-    <h2>
-      16-  O consumo frequente de cereais integrais está ligado a uma série de benefícios para a saúde que vão além da simples nutrição. Eles são uma poderosa fonte de fibras, o que contribui para o bom funcionamento do sistema digestivo e ajuda a manter a saciedade por mais tempo, auxiliando no controle do peso. Além disso, cereais integrais são ricos em antioxidantes e fitoquímicos, que protegem o organismo contra inflamações e ajudam a prevenir doenças crônicas, como o diabetes tipo 2 e doenças cardíacas. O consumo regular desses grãos integrais também está associado à melhora dos níveis de colesterol e à regulação da pressão arterial, tornando-os aliados essenciais para uma vida saudável e equilibrada.
-        <br><br>
-        Elaborado pelo professor, 2024.
-        <br><br>
-        Considerando o exposto sobre os benefícios, assinale a alternativa correta.
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. Cereais integrais são indicados apenas para pessoas que precisam ganhar peso.</button>
-        <button data-correct="false">2. Cereais integrais são fontes exclusivas de proteínas e lipídios, fundamentais para o crescimento.</button>
-        <button data-correct="false">3. O consumo de cereais refinados tem maior impacto na saúde cardiovascular do que os integrais.</button>
-        <button data-correct="true">4. Cereais integrais auxiliam no controle da glicemia e promovem a saúde intestinal devido ao seu teor de fibras.</button>
-        <button data-correct="false">5. Cereais integrais são menos calóricos e têm maior teor de vitaminas lipossolúveis em comparação aos refinados.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-   <div class="quiz-container">
-    <h2>
-      17-  A carne é uma das principais proteínas consumidas pela população brasileira, um alimento importante para a nutrição humana, contendo de 20 a 40% de proteína, ricas em ácidos aminados essenciais, além de contém sais minerais, vitaminas e glicídios. Um dos principais alimentos envolvidos em surtos de toxinfecções alimentares, a carne encontra-se susceptível a contaminação desde a produção, transformação, armazenamento, transporte e em condições de comercialização, além de serem passíveis de deterioração proteica, degradação das gorduras e dos carboidratos de sua constituição, estão sujeitas a alterações ocasionadas pelas próprias enzimas tissulares e pela atividade microbiana. Mesmo que o produto seja obtido de animais sadios, a carne pode ser um veículo de contaminantes de natureza biológica, física química, nas diferentes fases do processamento.
-        <br><br>
-        FANALLI, Simara Larissa. Perfil de consumo e percepção dos consumidores de carne: consequências sobre a saúde pública. Revista Científica de Medicina Veterinária, v. 31, p. 1-13, 2018.
-        <br><br>
-        Sobre o armazenamento adequado de carnes para evitar a contaminação, considere as afirmações:
-        <br><br>
-        I - As carnes devem ser armazenadas a temperaturas abaixo de 4°C para inibir o crescimento de bactérias.<br>
-        II - O congelamento prolongado não altera a textura ou sabor das carnes.<br>
-        III - Carnes cruas e cozidas devem ser mantidas separadas para evitar contaminação cruzada.<br>
-        IV - O tempo de armazenamento das carnes não influencia na segurança alimentar.<br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="true">1. I e III, apenas.</button>
-        <button data-correct="false">2. II e IV, apenas.</button>
-        <button data-correct="false">3. I, II e III, apenas.</button>
-        <button data-correct="false">4. II, III e IV, apenas.</button>
-        <button data-correct="false">5. I, II, III e IV.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-   <div class="quiz-container">
-    <h2>
-      18-  O pré-preparo das leguminosas, como o feijão, desempenha um papel fundamental na otimização do tempo de cocção e na melhoria de sua qualidade nutricional. Esse processo, que inclui a lavagem, seleção e, muitas vezes, o remolho dos grãos, contribui para a redução de compostos antinutricionais, como os fitatos, e facilita a absorção de nutrientes importantes, como o ferro e o zinco. Além disso, o remolho é essencial para tornar o feijão mais digerível, ajudando a reduzir os efeitos de gases intestinais.
-        <br><br>
-        FERNANDES, Ana Carolina; CALVO, Maria Cristina Marino; PROENÇA, Rossana Pacheco da Costa. Técnicas de pré-preparo de feijões em unidades produtoras de refeições das regiões Sul e Sudeste do Brasil. Revista de Nutrição, v. 25, p. 259-269, 2012.
-        <br><br>
-        Em relação ao pré-preparo das leguminosas qual é o melhor método, assinale a alternativa correta:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">1. Cozinhar diretamente sem qualquer tipo de preparação.</button>
-        <button data-correct="false">2. Utilizar uma solução salina para reduzir o tempo de cocção.</button>
-        <button data-correct="true">3. Demolhar em água fria durante 8 a 12 horas antes de cozinhar.</button>
-        <button data-correct="false">4. Acrescentar vinagre durante o cozimento para intensificar o sabor.</button>
-        <button data-correct="false">5. Cozinhar as leguminosas em altas temperaturas para amaciar rapidamente.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-    
-    <div class="quiz-container">
-    <h2>
-       20- A farinha é produzida pelo grão moído, previamente descascado e parcialmente desengordurado, resultando em uma farinha torrada chamada de Kinako. Pode ser utilizada em produtos panificáveis, mas, pelo teor elevado de gordura e fibra, torna os produtos mais pesados, necessitando de grande quantidade de fermento e farinha de trigo (glúten). É usada no preparo de pão, molho, sopa, pudim, croquete, biscoito, talharim, massa de pastel.
-        <br><br>
-        Fonte: PHILIPPI, S. T. Nutrição e técnica dietética. 3ª ed. Revisada e ampliada. Barueri-SP: Editora Manole, 2014, p. 424. Acesso em: 09 de set. 2023.
-        <br><br>
-        A farinha é obtida através da moagem do grão de cereal e pode variar conforme o grau de subdivisão e extração. Assinale a alternativa correta que corresponde ao grau de extração do grão da farinha branca, de primeira.
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="true">A. 30 a 60%.</button>
-        <button data-correct="false">B. 20 a 50%.</button>
-        <button data-correct="false">C. 40 a 70%.</button>
-        <button data-correct="false">D. 60 a 90%.</button>
-        <button data-correct="false">E. 50 a 80%.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      21-  O amido é um polissacarídeo formado por amilose e amilopectina. O amido é encontrado em sementes, raízes, tubérculos, bulbos e, em alguma porcentagem, nos caules e nas folhas dos vegetais. Encontra-se em grandes quantidades na batata, pão, arroz, macarrão e cereais. Na digestão o amido é decomposto, por reações de hidrólise, em carboidratos menores, como a glicose, que é a fonte primária de energia para o corpo.
-        <br><br>
-        Fonte: O Amido. Disponível em: <a href="https://www.ufrgs.br/alimentus1/terradearroz/grao/gr_grao_amido_popup.htm" target="_blank">https://www.ufrgs.br/alimentus1/terradearroz/grao/gr_grao_amido_popup.htm</a>. Acesso em: 10 set. 2023.
-        <br><br>
-        Considerando o processo de dextrinização, avalie as afirmações a seguir:
-        <br><br>
-        I. É a dilatação dos grânulos de amido quando submetidos à água aquecida, aumentando o seu volume em até três vezes. Isso acontece porque o amido é hidrófilo e a membrana que o envolve é permeável ao aquecimento. 
-        <br>
-        II. É o fenômeno que ocorre durante o resfriamento e o armazenamento de pastas de amido, normalmente indesejável, pois aumenta a firmeza em pães no armazenamento, estimula a formação de película em molhos cremosos e mingau, comprometendo a qualidade dos produtos. 
-        <br>
-        III. É a hidrólise do amido, devido ao aquecimento prolongado, rompendo gradativamente as membranas que envolvem os grãos de amido, liberando a dextrina (substância semissoúvel, produto da hidrólise do amido) tornando a preparação cada vez mais líquida.
-        <br>
-        IV. É a dilatação dos grânulos de amido quando submetidos à água aquecida, levando ao aumento de volume. Quando atende a temperatura de 95ºC, ocorre a formação de uma massa translúcida que constitui a goma do amido, a exemplo o mingau de aveia.
-        <br>
-        V. Ocorre no aquecimento prolongado, quando há um rompimento gradativo das membranas que envolvem os grãos de amido, liberando dextrina, que é uma substância semisolúvel.
-        <br><br>
-        Assinale a alternativa correta que corresponde à dextrinização.
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. I e II, apenas.</button>
-        <button data-correct="true">B. III e V, apenas.</button>
-        <button data-correct="false">C. II e IV, apenas.</button>
-        <button data-correct="false">D. I, III e IV, apenas.</button>
-        <button data-correct="false">E. I, II, III, IV e V.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-       22- O fator de correção dos alimentos (FC), também conhecido como fator de aquisição, está relacionado à perda de parte do alimento que inevitavelmente acontece durante o seu preparo. Esse cálculo é fundamental no dia a dia de uma cozinha profissional, uma vez que a quantidade de alimentos que é comprada é, em muitos casos, bem diferente da quantidade final que se obtém após a limpeza de cada insumo.
-        <br><br>
-        Fonte: Benetti, G.; Branco, L. <em>Manual de Técnicas Dietéticas</em>, 2ª Edição, Senac, Rio de Janeiro, RJ, 2014. Acesso em: 08 out. 2021.
-        <br><br>
-        Dado um per capita de 50 gramas de beterraba e um fator de correção de 1,25, qual a quantidade semanal, em quilos, que o responsável técnico deverá requisitar para atender 400 comensais por dia que irão consumir salada de beterraba durante três vezes na semana?
-        <br><br>
-        Assinale a alternativa correta.
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. 25 kg.</button>
-        <button data-correct="false">B. 74 kg.</button>
-        <button data-correct="false">C. 24 kg.</button>
-        <button data-correct="true">D. 75 kg.</button>
-        <button data-correct="false">E. 73 kg.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-       23-   O responsável técnico do restaurante Friburgo Royal Palace, no Bairro Alto Alegre de Maringá, comunicou ao chef responsável que, no dia 15 de dezembro do corrente ano, receberia 40 convidados para uma reunião de empresários, na Ala Bistrô. O Bufê serve diariamente 120 desjejuns, 200 almoços e 180 jantares. Durante a cocção, uma carne perde 40% do seu peso, sendo o seu Fator de Correção igual a 1,25.
-        <br><br>
-        <strong>Elaborado pelo professor, 2023.</strong>
-        <br><br>
-        Realize o cálculo para determinar a quantidade de carne a ser preparada para o almoço (peso bruto) neste dia, considerando uma porção de 150g por comensal. Em seguida, selecione a alternativa correta.
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. 63 Kg.</button>
-        <button data-correct="true">B. 60 Kg.</button>
-        <button data-correct="false">C. 45 Kg.</button>
-        <button data-correct="false">D. 52,5 Kg.</button>
-        <button data-correct="false">E. 55,5 Kg.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      24-  Carne de aves é a porção muscular comestível das aves abatidas e declaradas aptas à alimentação humana. Aves domésticas, de criação mais conhecidas, são: galeto, frango, galinha, galo, peru, pombo, pato, ganso, perdiz, codorna, faisão, galinha d’angola, ou guiné. São semelhantes às demais carnes quanto à composição química, valor proteico, valor nutritivo e utilização; porém diferem na estrutura, por apresentarem menor teor de tecido conjuntivo, que as torna mais tenras e com maior digestibilidade.
-        <br><br>
-        Fonte: BRASIL. <em>Manual de Alimentação das Forças Armadas</em>. Portaria Normativa nº 219/MD, de 12 de fevereiro de 2010. Brasília: Ministério da Defesa: Secretaria de Ensino, Logística, Mobilização, Ciência e Tecnologia, 2010.
-        <br><br>
-        A carne de aves em relação ao custo é mais barata que a carne de boi e suína, devido ao curto período de produção, sendo umas das opções mais atraentes aos comensais que querem comer bem e gastar pouco. Analise as afirmativas a seguir:
-        <br><br>
-        I. Possuem menor quantidade de gordura, que é depositada no tecido muscular, sob a pele e em torno dos órgãos na cavidade abdominal, tendo o ponto de fusão mais baixo.
-        <br>
-        II. É uma carne clara com menor teor de ferro e maior teor de vitamina B3, quando comparado às outras carnes.
-        <br>
-        III. Na hora de comprar a carne de frango, a mesma deve estar com consistência elástica, deve ceder ao toque e voltar à forma quando interrompida a pressão.
-        <br><br>
-        As afirmações I, II e III são, respectivamente:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. V, V, F.</button>
-        <button data-correct="true">B. V, V, V.</button>
-        <button data-correct="false">C. F, V, V.</button>
-        <button data-correct="false">D. V, F, V.</button>
-        <button data-correct="false">E. F, V, F.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      25-  O estudo da disciplina de Técnica Dietética permite ao estudante de gastronomia conhecer os alimentos e os nutrientes que os compõem, assim como a funcionalidade deles em uma preparação culinária, os processos culinários a que são submetidos e que resultarão em modificações de acordo com a técnica de preparo utilizada, com o foco de preservar e biodisponibilizar os nutrientes ao organismo.
-        <br><br>
-        Fonte: Técnica Dietética: Introdução. PORTAL EDUCAÇÃO.
-        Disponível em: <a href="https://siteantigo.portaleducacao.com.br/conteudo/artigos/direito/tecnica-dietetica-introducao/30321" target="_blank">https://siteantigo.portaleducacao.com.br/conteudo/artigos/direito/tecnica-dietetica-introducao/30321</a>. Acesso em: 10 out. 2021.
-        <br><br>
-        De acordo com os conceitos que englobam a disciplina de Técnica Dietética, em geral, avalie as afirmações a seguir como (V) para verdadeiras e (F) para falsas:
-        <br><br>
-        I. A ferramenta de trabalho do gastrólogo, na Técnica Dietética, é o alimento. Importante conhecê-lo para efetuar escolhas adequadas, em relação aos grupos de alimentos, podendo também esclarecer os comensais sobre as diversas formas de preparo.
-        <br>
-        II. Alguns alimentos naturais passam por alterações mínimas antes da sua comercialização, por exemplo, limpeza (batata lavada), remoção de partes não comestíveis (folhas e talos), secagem (grãos), empacotamento (cereais e leguminosas), resfriamento (carnes), pasteurização (leite), moagem para obtenção de farinhas, para garantir a conservação e maior vida de prateleira, pois alimentos naturais são perecíveis e estragam rapidamente.
-        <br>
-        III. Os alimentos são provenientes de três grupos de matéria-prima, das quais se originam e são utilizados no processamento de preparações ou produtos alimentícios: origem vegetal: hortaliças, frutas, leguminosas, sementes oleaginosas, cereais, ervas e especiarias; origem animal: carnes (bovina, suína, aves, carnes de caça), leite (de diversas espécies) e derivados, pescados (peixes, crustáceos, moluscos, entre outros), mel e ovos e, origem mineral: água e sal.
-        <br>
-        IV. As leguminosas de importância na alimentação humana são: arroz, trigo, milho, aveia, dados como principais. As leguminosas são formadas por estruturas distintas: casca, película ou farelo, endosperma e germe que apresentam valores nutritivos diferentes.
-        <br>
-        V. Os cereais são considerados como fontes de carboidratos complexos e energia, pois são constituídos, principalmente, de amido.
-        <br><br>
-        As afirmações I, II, III, IV e V são, respectivamente:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. F, V, V, F, V.</button>
-        <button data-correct="false">B. V, F, V, V, F.</button>
-        <button data-correct="true">C. V, V, V, F, V.</button>
-        <button data-correct="false">D. F, V, F, F, F.</button>
-        <button data-correct="false">E. V, V, F, F, V.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      26-  O preparo é uma das últimas etapas de um processo de produção de alimentos e, por isso, todo o cuidado é pouco. Se a etapa de preparo for a cocção, esse será o último momento que o alimento passará por temperaturas elevadas, temperaturas essas, que eliminam ou reduzem os microrganismos a quantidades aceitáveis, a ponto de não causarem danos à saúde dos consumidores.
-        <br><br>
-        Fonte: <em>Boas Práticas de Manipulação de Alimentos</em>. Disponível em: 
-        <a href="http://www.dabst.eb.mil.br/_upados/_secoes/_sgls/_2017/PASA-PROGRAMA-DE-AUDITORIA-E-SEGURANCA-ALIMENTAR/MATERIAL-DIDATICO/Criterios_de_Preparo_na_Manipulacao_de_Alimentos.pdf" target="_blank">
-        Critérios de Preparo na Manipulação de Alimentos</a>. Acesso em: 06 de set. 2023.
-        <br><br>
-        Com relação aos objetivos do preparo dos alimentos na cozinha dietética, analise as afirmações a seguir:
-        <br><br>
-        I. Permitir o aproveitamento de alimentos que não poderiam ser consumidos em seu estado natural. Por exemplo: arroz, feijão, aipim.
-        <br>
-        II. Tornar o alimento de mais fácil digestão, acessível também ao aparelho digestivo imaturo como o de crianças, lesados como o de doentes e desgastados como o de idosos.
-        <br>
-        III. Melhorar o sabor dos alimentos.
-        <br>
-        IV. Favorecer o aspecto, dando melhor apresentação ao alimento.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. III e IV, apenas.</button>
-        <button data-correct="false">B. II e III, apenas.</button>
-        <button data-correct="true">C. I, II, III e IV.</button>
-        <button data-correct="false">D. I e II, apenas.</button>
-        <button data-correct="false">E. I, apenas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      27-   Atualmente, a análise sensorial pode ser aplicada para diferentes objetivos, como por exemplo, para a determinação de normas e estabelecimento de critérios e referências de qualidade, pelos quais a matéria-prima, os ingredientes e o produto final podem ser classificados e avaliados.
-        <br><br>
-        Fonte: TEIXEIRA, L. V. <em>Análise sensorial na indústria de alimentos</em>. Revista do Instituto de Laticínios Cândido Tostes, v. 64, n. 366, p. 12-21, 2009. Acesso em: 11 set. 2023.
-        <br><br>
-        Diante do fragmento de texto e das finalidades para a análise e interpretação, das reações relacionadas às características dos alimentos, analise as afirmações a seguir.
-        <br><br>
-        I. A análise sensorial é uma ciência ou disciplina científica usada para medir, analisar e interpretar as reações às características dos alimentos e, tal como, são percebidas pelos sentidos da visão, olfato, paladar, tato e audição.
-        <br>
-        II. As alterações dos alimentos causadas por microrganismos patogênicos provocam a destruição das características sensoriais do mesmo, na grande maioria das vezes pelo binômio tempo versus temperatura, podendo vir a produzir toxinas letais aos consumidores.
-        <br>
-        III. Um dos fatores que se dá o aparecimento do cheiro/gosto estragado dos alimentos pode acontecer por reações a curto prazo, que acarretam modificações sensoriais dos alimentos.
-        <br>
-        IV. Podemos dizer que a qualidade sensorial é uma característica do alimento e, não o resultado da interação entre indivíduo e alimento.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. I e II, apenas.</button>
-        <button data-correct="false">B. II, III e IV, apenas.</button>
-        <button data-correct="true">C. I, II e III, apenas.</button>
-        <button data-correct="false">D. II e III, apenas.</button>
-        <button data-correct="false">E. I, II, III e IV.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      28-  Os níveis atuais do consumo médio nacional de feijão estão dentro do recomendado; no entanto, a ação dos profissionais de saúde deve promover a manutenção desses níveis, ou mesmo, o aumento dos níveis do consumo. Pelo menos metade da ingestão diária de proteínas deveria ser de origem vegetal, não havendo inconveniência para a saúde se essa quantidade for ultrapassada.
-        <br><br>
-        Fonte: Coordenação Geral da Política de Alimentação e Nutrição, Departamento de Atenção Básica, Secretaria de Assistência à Saúde, Ministério da Saúde. <em>Guia alimentar para a população brasileira: promovendo a alimentação saudável</em>. Brasília: Ministério da Saúde; 2006. Acesso em: 06 set. 2023.
-        <br><br>
-        Considerando as informações apresentadas, analise as afirmações a seguir:
-        <br><br>
-        I. Hortaliças são vegetais geralmente cultivados em hortas e compreendem as partes comestíveis das plantas incluindo raízes, caules, folhas, frutos e sementes, apresentando alto teor de vitaminas e minerais.
-        <br>
-        II. São exemplos de hortaliças classificadas segundo o teor de glicídio a 5%, a abobrinha, o pimentão, o tomate, a acelga e o jiló.
-        <br>
-        III. A classificação botânica de tubérculos e raízes, apresenta como exemplos: beterraba, cenoura, nabo, rabanete, aipim, batata, cará e inhame.
-        <br>
-        IV. As leguminosas, como os feijões e as oleaginosas como as castanhas e sementes são alimentos fundamentais para a saúde.
-        <br>
-        V. A preparação típica brasileira feijão com arroz é uma combinação alimentar saudável e completa em proteínas.
-        <br><br>
-        É correto que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. II, III e V, apenas.</button>
-        <button data-correct="false">B. I e III, apenas.</button>
-        <button data-correct="false">C. I, apenas.</button>
-        <button data-correct="true">D. I, II, III, IV e V.</button>
-        <button data-correct="false">E. I, II, III e IV, apenas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<div class="quiz-container">
-    <h2>
-      29- Do ponto de vista da saúde, há três aspectos que se deve saber sobre as gorduras e óleos de origem animal e vegetal. Primeiro, as gorduras e óleos são produtos de alta concentração energética: fornecem 900kcal/100g. Isso é mais do que o álcool e duas vezes mais do que os carboidratos e as proteínas. Segundo, existem tipos diferentes de gordura com impactos diferentes na saúde. Terceiro, o impacto das gorduras e dos óleos na saúde depende em grande parte do tipo de alimento consumido e do nível de atividade física.
-        <br><br>
-        Fonte: <em>GUIA ALIMENTAR PARA A POPULAÇÃO BRASILEIRA Promovendo a Alimentação Saudável</em>. Disponível em: 
-        <a href="http://bvsms.saude.gov.br/bvs/publicacoes/guia_alimentar_populacao_brasileira_2008.pdf" target="_blank">
-        Guia Alimentar</a>. Acesso em: 18 out. 2021.
-        <br><br>
-        Sobre óleos e gorduras, analise as afirmações a seguir:
-        <br><br>
-        I. As gorduras e os óleos têm como objetivo, fixar e realçar o sabor e a palatabilidade dos alimentos; agem como lubrificantes dos alimentos evitando o ressecamento; promovem o amaciamento de massas e produtos de panificação, como também, permitem o preparo de alimentos em emulsão.
-        <br>
-        II. As gorduras podem degradar com facilidade e ocorrer o desenvolvimento da rancidez. A formação do “ranço” ou rancificação, resulta da combinação de ácido graxo com oxigênio, formando peróxido, prejudicando o sabor e o odor das gorduras, inativando as vitaminas lipossolúveis A e E - deterioração da gordura.
-        <br>
-        III. Gordura hidrogenada se refere a uma gordura transformada a partir dos óleos vegetais por um processo de hidrogenação em condições de alta pressão e temperatura e, durante bastante tempo, tornando-os gordura (sólida), benéficas à saúde. Em bolos, confere maciez e crescimento, batida incorpora ar e aumenta volume de massa.
-        <br>
-        IV. Uma das principais diferenças entre óleos e gorduras é sua forma em temperatura ambiente, óleos são sólidos e gorduras são líquidas.
-        <br>
-        V. A extração de óleos é feita pela indústria de alimentos, a fim de aumentar o prazo de validade dos produtos, além de ser fácil o transporte após esse processo, ela auxilia na forma e textura dos alimentos, reduzindo custos e, não precisa de um ambiente específico para ser estocada e armazenada.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="true">A. I e II, apenas.</button>
-        <button data-correct="false">B. I, II, III, IV e V.</button>
-        <button data-correct="false">C. I, II e IV, apenas.</button>
-        <button data-correct="false">D. I, II, III e IV, apenas.</button>
-        <button data-correct="false">E. II e III, apenas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-   
-    <div class="quiz-container">
-    <h2>
-      30-   Existem muitos métodos de cocção de alimentos colocados à disposição da população, empresas comerciais e indústrias para a produção de alimentos, aumentando a digestibilidade, características sensoriais e prolongamento do prazo de validade dos alimentos. A fritura é uma forma de cocção muito utilizada para salgadinhos, legumes, frutas e carnes em geral e de grande aceitação pela população. A fritura tem ação benéfica sobre a cor, sabor e aroma do alimento, por outro lado, pode gerar compostos nocivos à saúde da população se o óleo for utilizado em excesso.
-        <br><br>
-        Fonte: <em>MARQUES, Elisabete Coentrão; MARQUES, Renata Coentrão. Controle da qualidade de óleos para fritura em serviços de alimentação.</em> Higiene Alimentar, v. 31, n. 274-275, 2017, p. 55-59.
-        <br><br>
-        Conforme o conteúdo estudado sobre óleos e gorduras, analise as afirmativas a seguir:
-        <br><br>
-        I. As principais fontes de ácidos graxos saturados são azeite de oliva, óleos vegetais (girassol, canola e arroz), azeitona, abacate e oleaginosas (castanhas, nozes, amêndoas).<br>
-        II. A gordura é sólida à temperatura ambiente.<br>
-        III. Algumas gorduras poli-insaturadas são essenciais para manutenção da saúde e da própria vida. As principais fontes são os óleos vegetais, como o óleo de girassol e de soja.<br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. II, apenas.</button>
-        <button data-correct="false">B. I, II e III.</button>
-        <button data-correct="false">C. I e II, apenas.</button>
-        <button data-correct="false">D. I e III, apenas.</button>
-        <button data-correct="true">E. II e III, apenas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-<div class="quiz-container">
-    <h2>
-       31- Os seres humanos são onívoros, isto é, alimentam-se de uma enorme variedade de alimentos tanto de origem vegetal como animal.
-        Desde a pré-história, a carne e os outros alimentos de origem animal fazem parte do consumo alimentar humano, levando a uma dieta adequada, segura e de qualidade aos comensais.
-        <br><br>
-        Fonte: <em>NATIONAL HEART FORUM (UK). At least five a day: strategies to increase vegetable and fruit consumption.</em> London: National Forum, 1997. Acesso em: 06 de set. 2023. (modificado).
-        <br><br>
-        Considerando os produtos de origem animal, analise as afirmações a seguir:
-        <br><br>
-        I. Os alimentos de origem animal são nutritivos, desde que consumidos sem moderação. O consumo moderado é recomendado devido ao alto teor de gorduras insaturadas nesses alimentos, que aumentam o risco de desenvolvimento da obesidade, de doenças cardíacas e outras doenças.<br>
-        II. O leite, independentemente de seu conteúdo de gordura, é a principal fonte alimentar de cálcio, que juntamente com a vitamina D (sintetizada pelo organismo a partir da luz do sol), é necessário para o fortalecimento dos ossos durante a fase de crescimento.<br>
-        III. As gorduras são distintas em suas propriedades físicas e químicas. E, são essas características que podem ser mais ou menos benéficas para a saúde humana, tendo como base, que as elas são classificadas em saturadas e insaturadas. Portanto, embora as gorduras componham uma alimentação saudável, a quantidade e o tipo de gordura devem ser observados, durante o consumo diário.<br><br>
-        É correto o que se afirma em:
-    </h2>
-
-    <div class="answers">
-        <button data-correct="false">A. Apenas I.</button>
-        <button data-correct="true">B. II e III.</button>
-        <button data-correct="false">C. I e II.</button>
-        <button data-correct="false">D. I, II e III.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-    <div class="quiz-container">
-    <h2>
-       32-  Sendo a maciez da carne um dos fatores de maior importância comercial, vários são os métodos utilizados para se obter essa característica. O uso de enzimas proteolíticas se faz para a obtenção de carne macia, ou em casos em que pacientes necessitam de uma alimentação via parenteral (devido a dificuldades de digestão).
-        <br><br>
-        Fonte: <em>PEDREIRA, C. M. S. Enzimas proteolíticas de plantas usadas no amaciamento da carne: bromelina, ficina e papaína.</em> BeefPoint. 18 maio 2001. Disponível em: 
-        <a href="https://bit.ly/2o8ih4x" target="_blank">https://bit.ly/2o8ih4x</a>. Acesso em: 30 dez. 2019.
-        <br><br>
-        Considerando o amaciamento de carnes, avalie as asserções a seguir e a relação proposta entre elas:
-        <br><br>
-        I. As enzimas mais conhecidas para amaciamento de carnes são a papaína e a bromelina, provenientes do mamão e do abacaxi, respectivamente. Elas geram hidrólise geral dos componentes estruturais da carne bovina, sem perder o valor nutritivo da carne.<br>
-        <strong>PORQUE</strong><br>
-        II. O amaciamento térmico melhora a digestibilidade da carne e a maciez, pois o efeito do calor, ao desconfigurar a estrutura da proteína, expõe as ligações peptídicas, facilitando o acesso das proteases digestivas e, assim, aumenta o aproveitamento deste nutriente.<br><br>
-        A respeito dessas asserções, assinale a opção correta:
-    </h2>
-
-    <div class="answers">
-        <button data-correct="false">A. As asserções I e II são proposições falsas.</button>
-        <button data-correct="false">B. A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.</button>
-        <button data-correct="true">C. As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.</button>
-        <button data-correct="false">D. As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      33-  O termo cocção é muito usado na cozinha, nada mais é do que o processo em que se aplica calor ao alimento com o objetivo de mudar sua estrutura, alterar seu sabor e torná-lo adequado à digestão. Diante disso, os métodos de cocção devem ser vistos como fórmulas que, aplicadas a diferentes ingredientes, produzem resultados também diversos.
-        <br><br>
-        Fonte: <em>PHILIPPI, S. T. Nutrição e técnica dietética.</em> Editora Manole, 2019. Acesso em: 06 de set. 2023.
-        <br><br>
-        Em relação aos métodos de cocção e as operações de preparo dos alimentos, analise as afirmativas:
-        <br><br>
-        I. Todos os métodos de cocção ocorrem através da transmissão de calor, que podem ser: Condução, convecção ou radiação.<br>
-        II. Condução é a transferência de calor por contato direto das partículas da matéria.<br>
-        III. Cocção por micro-ondas se dá por meio da radiação de ondas geradas pelo forno de micro-ondas que aquecem as partículas de água presentes no alimento.<br>
-        IV. Radiação é um processo que dispensa o contato direto do alimento com a fonte de calor, já que a transmissão se dá por meio de ondas.<br>
-        V. Um exemplo prático de convecção é a água em ebulição no cozimento de uma batata ou o ar quente assando um bolo.<br><br>
-        É correto o que se afirma em:
-    </h2>
-
-    <div class="answers">
-        <button data-correct="false">A. I, II e IV, apenas.</button>
-        <button data-correct="false">B. II, III e V, apenas.</button>
-        <button data-correct="false">C. I, III e IV, apenas.</button>
-        <button data-correct="true">D. I, II, III, IV e V.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      34-  O amido é um polissacarídeo formado por amilose e amilopectina. O amido é encontrado em sementes, raízes, tubérculos, bulbos e, em alguma porcentagem, nos caules e nas folhas dos vegetais. Encontra-se em grandes quantidades na batata, pão, arroz, macarrão e cereais. Na digestão, o amido é decomposto, por reações de hidrólise, em carboidratos menores, como a glicose, que é a fonte primária de energia para o corpo.
-        <br><br>
-        Fonte: O Amido. Disponível em: <a href="https://www.ufrgs.br/alimentus1/terraedarroz/grao/gr_grao_amido_popup.htm" target="_blank">https://www.ufrgs.br/alimentus1/terraedarroz/grao/gr_grao_amido_popup.htm</a>. Acesso em: 10 set. 2023.
-        <br><br>
-        Considerando o processo de dextrinização, avalie as afirmações a seguir:
-        <br><br>
-        I. É a dilatação dos grânulos de amido quando submetidos à água aquecida, aumentando o seu volume em até três vezes. Isso acontece porque o amido é hidrofílico e a membrana que o envolve é permeável ao aquecimento.<br>
-        II. É o fenômeno que ocorre durante o resfriamento e o armazenamento de pastas de amido, normalmente indesejável, pois aumenta a firmeza em pães no armazenamento, estimula a formação de película em molhos e cremes em guarnição, comprometendo a qualidade dos produtos.<br>
-        III. É a hidrólise do amido, devido ao aquecimento prolongado, rompendo gradativamente as membranas que envolvem os grãos de amido, liberando a dextrina (substância semissolúvel, produto da hidrólise do amido) tornando a preparação cada vez mais líquida.<br>
-        IV. É a dilatação dos grânulos de amido quando submetidos à água aquecida, levando ao aumento de volume. Quando atinge a temperatura de 95°C, ocorre a formação de uma massa translúcida que constitui a goma do amido, a exemplo o mingau de aveia.<br>
-        V. Ocorre no aquecimento prolongado, quando há um rompimento gradativo das membranas que envolvem os grãos de amido, liberando dextrina, que é uma substância semissolúvel.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. I, II e IV, apenas.</button>
-        <button data-correct="false">B. II, IV e V, apenas.</button>
-        <button data-correct="false">C. III e IV, apenas.</button>
-        <button data-correct="false">D. I, III e V, apenas.</button>
-        <button data-correct="true">E. III e V, apenas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-
-    <div class="quiz-container">
-    <h2>
-       35- O amaciamento enzimático da carne é um resultado da degradação parcial dos componentes da carne. A papaína proveniente do mamão, a bromelina proveniente do abacaxi e a ficina proveniente do figo possuem efetiva ação amaciante.
-        <br><br>
-        Fonte: <em>MACIEL, A. R. et al. Amaciantes Cárneos: tipos e aplicação em carne bovina.</em> DESAFIOS, v. 2, n. 1, p. 160-174, 2016. Disponível em: 
-        <a href="https://sistemas.uft.edu.br/periodicos/index.php/desafios/article/view/1266" target="_blank">DESAFIOS</a>. Acesso em 11 out. 2021.
-        <br><br>
-        Tendo como base o fragmento de texto, o amaciamento da carne pode ser influenciado por alguns processos. Analise as afirmações a seguir:
-        <br><br>
-        I. No amaciamento térmico ocorre a quebra ou fragmentação das fibras da carne, por atividades simples como o bater, o cortar, o picar e o moer. Pode ser feito no açougue, com máquinas de amaciamento ou em casa com um martelo de cozinha.<br>
-        II. Os processos mecânicos melhoram a digestibilidade da carne e a maciez, pois o efeito do calor ao desconfigurar a estrutura da proteína expõe as ligações peptídicas, facilitando o acesso das proteases digestivas e, assim, aumentando o aproveitamento deste nutriente.<br>
-        III. No amaciamento químico utiliza-se de enzimas para digerir a proteína da carne para amaciá-la. As enzimas mais conhecidas são provenientes do mamão e do abacaxi e, elas geram hidrólise dos componentes estruturais da carne bovina, sem perder o valor nutritivo da mesma.<br><br>
-        É correto apenas o que se afirma em:
-    </h2>
-
-    <div class="answers">
-        <button data-correct="false">A. I, apenas.</button>
-        <button data-correct="false">B. I e II, apenas.</button>
-        <button data-correct="true">C. III, apenas.</button>
-        <button data-correct="false">D. II e III, apenas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      36-  Os pigmentos presentes na carne são constituídos por duas proteínas: a hemoglobina, que é o pigmento do sangue, e a mioglobina, que é o pigmento dos músculos. A porção heme do pigmento é importante na determinação da cor da carne. Os pigmentos da carne podem reagir com diversos substratos resultando em alterações na sua cor.
-        <br><br>
-        Fonte: <em>CARVALHO, I. T. Microbiologia de Alimentos. DDUFRPEI. Recife. 2010.</em> Disponível em: 
-        <a href="http://pronatec.ifpr.edu.br/wp-content/uploads/2013/06/Microbiologia_dos_Alimentos.pdf" target="_blank">
-        Microbiologia dos Alimentos</a>. Acesso: 06 de ago. 2023.
-        <br><br>
-        A mioglobina e a hemoglobina são os dois pigmentos responsáveis pela coloração da carne e se comportam de maneira semelhante sob a ação do oxigênio e do calor. Considerando isto, analise as afirmações a seguir:
-        <br><br>
-        I. A hemoglobina em presença de oxigênio forma a oxiemoglobina, de cor vermelho-brilhante, e quando aquecida (acima de 64°C) decompõe-se a hemoglobina, dando como resultado uma substância de cor marrom chamada de hematina.<br>
-        II. Na cocção da carne bovina, ocorrem modificações estruturais; à medida que se eleva a temperatura, ocorrem modificações, tais como a fusão da gordura; formação da hematina; evaporação de substâncias extrativas; gelatinização do colágeno e coagulação das proteínas, entre outras.<br>
-        III. Durante a cocção da carne vermelha, ocorrem modificações nos tecidos muscular, conjuntivo e adiposo; portanto, a coagulação das proteínas acontece antes da decomposição.<br>
-        IV. Tecido Muscular (colágeno e elastina) - possui a função de sustentação. Em água fria são insolúveis; submetidos ao calor seco, dessecam e endurecem.<br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. I e II, apenas.</button>
-        <button data-correct="true">B. I, II e III, apenas.</button>
-        <button data-correct="false">C. II, III e IV, apenas.</button>
-        <button data-correct="false">D. I, II, III e IV.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      37-  Atualmente, a análise sensorial pode ser aplicada para diferentes objetivos, como por exemplo, para a determinação de normas e estabelecimento de critérios e referências de qualidade, pelos quais a matéria-prima, os ingredientes e o produto final podem ser classificados e avaliados.
-        <br><br>
-        Fonte: <em>TEIXEIRA, L. V. Análise sensorial na indústria de alimentos.</em> Revista do Instituto de Laticínios Cândido Tostes, v. 64, n. 366, p. 12-21, 2009. Acesso em: 11 set. 2023.
-        <br><br>
-        Diante do fragmento de texto e das finalidades para a análise e interpretação, das reações relacionadas às características dos alimentos, analise as afirmações a seguir:
-        <br><br>
-        I. A análise sensorial é uma ciência ou disciplina científica usada para medir, analisar e interpretar as reações às características dos alimentos e, tal como, são percebidas pelos sentidos da visão, olfato, paladar, tato e audição.<br>
-        II. As alterações dos alimentos causadas por microrganismos patogênicos provocam a destruição das características sensoriais do mesmo, na grande maioria das vezes pelo binômio tempo versus temperatura, podendo vir a produzir toxinas letais aos consumidores.<br>
-        III. Um dos fatores que se dá o aparecimento do cheiro/gosto estragado dos alimentos pode acontecer por reações a curto prazo, que acarretam modificações sensoriais dos alimentos.<br>
-        IV. Podemos dizer que a qualidade sensorial é uma característica do alimento e, não o resultado da interação entre indivíduo e alimento.<br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="true">A. I, II e III, apenas.</button>
-        <button data-correct="false">B. I, II, III e IV.</button>
-        <button data-correct="false">C. I e II, apenas.</button>
-        <button data-correct="false">D. II e IV, apenas.</button>
-        <button data-correct="false">E. III e IV, apenas.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      38-  Os indicadores de preparo de alimentos foram estabelecidos para indicar a relação de perdas ou ganhos de peso do alimento durante as etapas de pré-preparo e preparo. A retirada de partes do alimento durante o seu pré-preparo e o aumento ou perda de peso durante o preparo, quando comparado com o peso inicial, motivaram a criação do Fator de Correção (FC).
-        <br><br>
-        Fonte: ABREU, E. S. de; SPINELLI, M. G. N. <em>Seleção e preparo de alimentos: gastronomia e nutrição</em>. São Paulo: Editora Metha, 411 p., 2014. Acesso em: 11 de set. 2023. (adaptado).
-        <br><br>
-        Sobre o cálculo do Fator de Correção dos Alimentos (FC), assinale a alternativa correta considerando a necessidade de obter 5 Kg de beterraba para o preparo de um suflê, sendo o FC da beterraba igual a 1,5. Qual será a quantidade de beterraba a ser comprada (em Kg)?
-    </h2>
-
-    <div class="answers">
-        <button data-correct="true">A. 7,5</button>
-        <button data-correct="false">B. 10</button>
-        <button data-correct="false">C. 5,25</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      39-  A carne de pescado é de excelente valor nutritivo, composta por proteínas de alto valor biológico, de fácil digestibilidade e de gorduras insaturadas que não são prejudiciais à saúde. Pescado compreende os peixes, crustáceos, moluscos, anfíbios, quelônios e mamíferos de água doce ou salgada, usados na alimentação. A estrutura tissular do peixe é débil e sua trama muscular mais friável, com menos colágeno, por isso, é menos compacta e elástica se comparada com o músculo dos mamíferos.
-        <br><br>
-        Fonte: VASMON, L. P. P. <em>Café da Manhã e Lanches</em>. Maringá-PR: Unicesumar, 2017.
-        <br><br>
-        A respeito da carne de pescado, avalie as situações propostas e assinale (V) para verdadeiro e (F) para falso:
-        <br><br>
-        I. O pescado in natura deve ser comercializado totalmente envolvido em gelo de qualidade (refrigerado) ou em câmara fria a 0°C.<br>
-        II. Por apresentar um sabor suave, textura fina e macia e cor clara, os peixes devem ser acompanhados de alimentos de sabor mais acentuado para fazer contraste.<br>
-        III. A cocção do peixe deve ser em fogo alto, devido à sua demora no preparo, pois é uma carne que apresenta muito tecido conjuntivo.
-        <br><br>
-        As afirmações I, II e III são, respectivamente:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. F, V, F</button>
-        <button data-correct="true">B. V, V, F</button>
-        <button data-correct="false">C. V, F, V</button>
-        <button data-correct="false">D. F, F, V</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-       40- Os principais pigmentos responsáveis pela cor característica da carne são a mioglobina e a hemoglobina. Fatores como estresse, tempo e forma de resfriamento, queda do pH e final da carne, também exercem efeito na coloração da carne. Pela presença de bactérias, pode ocorrer a descoloração bacteriana, surgindo pigmentos de cor verde. Na determinação da cor da carne, considera-se ainda a propriedade de dispersão de luz, que ocorre do estado fisiológico do animal ao abate e do regime de resfriamento a que a carcaça foi submetida.
-        <br><br>
-        Fonte: CORNFORTH, D. <em>Color: sua base e importância</em>. In: Atributos de qualidade e sua medição em produtos de carnes, aves e peixes. Springer, Boston, MA, 1994. p. 34-78. Disponível em: <a href="https://www.fca.unesp.br/Home/Instituicao/Departamentos/Gestaoetecnologia/Teses/roca306.pdf" target="_blank">https://www.fca.unesp.br/Home/Instituicao/Departamentos/Gestaoetecnologia/Teses/roca306.pdf</a>. Acesso em: 11 set. 2023. (adaptado).
-        <br><br>
-        De acordo com os conceitos relacionados à coloração vermelha da carne, analise as afirmações a seguir:
-        <br><br>
-        I. A mioglobina e a hemoglobina são formadas em sua maior parte por proteínas: a mioglobina é o pigmento muscular que retém o oxigênio nos tecidos e a hemoglobina é o pigmento sanguíneo responsável pelo transporte de O<sub>2</sub> na corrente sanguínea.<br>
-        II. A cor da carne indica a concentração de mioglobina e seu estado de oxigenação ou oxidação na superfície do músculo. A quantidade de mioglobina varia com a espécie, sexo, idade, localização anatômica do músculo, atividade física, pelo tipo de fibra muscular, bem como pelo nível de sangria do animal no abate.<br>
-        III. Ao cortarmos a carne proveniente de um bovino recém abatido, observamos a cor vermelho púrpura, devido principalmente à mioglobina.
-        <br><br>
-        É correto apenas o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. I e II.</button>
-        <button data-correct="false">B. I e III.</button>
-        <button data-correct="false">C. II e III.</button>
-        <button data-correct="true">D. I, II e III.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-    
-    <div class="quiz-container">
-    <h2>
-      42-  Disponível em abundância, na natureza, o amido é de grande importância nutricional e industrial. O mercado conhece três tipos de amidos: o modificado, o pré-gelificado e o resistente, sendo que este último é bem importante, devido às suas propriedades funcionais.
-        <br><br>
-        Fonte: <em>AS PROPRIEDADES FUNCIONAIS DO AMIDO</em>. Rev. ADITIVOS & INGREDIENTES. Disponível em: <a href="https://funcionaisnutraceuticos.com.br/upload_arquivos/201612/2016120402772001481553160.pdf" target="_blank">https://funcionaisnutraceuticos.com.br/upload_arquivos/201612/2016120402772001481553160.pdf</a>. Acesso em: 11 out. 2021.
-        <br><br>
-        De acordo com as características funcionais dos cereais, assinale a alternativa correta, quanto ao produto intermediário da hidrólise do amido.
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. Lignina.</button>
-        <button data-correct="true">B. Dextrina.</button>
-        <button data-correct="false">C. Amilopectina.</button>
-        <button data-correct="false">D. Celulose.</button>
-        <button data-correct="false">E. Amilose.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      43-  O leite, em circunstâncias naturais, é definido como sendo uma emulsão branca, ligeiramente amarelada, de odor suave e gosto adocicado. Por definição, somente pode-se denominar leite como sendo a secreção da glândula mamária de uma vaca sem nenhuma alteração, isto é, com todos os seus constituintes, sem submeter-se a nenhum tratamento que modifique seu valor nutricional. Conforme o Regulamento de Inspeção Sanitária de Produtos de Origem Animal (RIISPOA), o leite é definido como o produto normal, fresco e integral, oriundo da ordenha completa e ininterrupta de vacas sadias (RIISPOA, 1952).
-        <br><br>
-        Fonte: Conceitos Gerais do Leite. Disponível em: 
-        <a href="https://bit.ly/2mvc6GG" target="_blank">https://bit.ly/2mvc6GG</a>. 
-        Acesso em: 20 de agosto de 2019.
-        <br><br>
-        Considerando o que foi estudado sobre o conceito e a composição do leite, avalie as afirmativas a seguir como V para verdadeiras e F para falsas:
-        <br><br>
-        I. As principais proteínas dos alimentos são a caseína, albumina e a globulina, sendo que a caseína, uma fosfoproteína, é a principal proteína do leite.<br>
-        II. As lipases são as responsáveis pelo ranço hidrolítico e a fosfatase ao indicador de falha na pasteurização do leite.<br>
-        III. Os ácidos graxos saturados como caprílico e cáprico, presentes 60 a 70% na gordura do leite, dão aroma ao produto.<br>
-        IV. O carboidrato do leite é a lactose, dissacarídeo que pela digestão fornece glicose e galactose.<br><br>
-        As afirmações I, II, III e IV são, respectivamente:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. F, F, F, V.</button>
-        <button data-correct="false">B. F, V, V, F.</button>
-        <button data-correct="false">C. F, V, F, V.</button>
-        <button data-correct="true">D. V, V, F, V.</button>
-        <button data-correct="false">E. V, V, V, V.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      44-  A falta de uniformidade de utensílios na cozinha é evidente no Brasil, pois encontramos capacidades diferenciadas, relacionadas aos pesos, medidas e volumes, em diversas linhas e marcas de instrumentos utilizados em UANs. No entanto, sabemos que, para o sucesso de qualquer receita, é fundamental que os ingredientes sejam pesados, medidos, e seus volumes aferidos com a máxima precisão. É imprescindível que os ingredientes de uma preparação culinária sejam medidos com precisão, visando a obtenção de resultados semelhantes a cada repetição da receita ou protocolo.
-        <br><br>
-        Os alimentos líquidos devem ser colocados nos utensílios de medição, pesados e transferidos para os medidores de vidro graduados.
-        <br><br>
-        Sobre as afirmativas abaixo, assinale **V** para verdadeiro e **F** para falso:
-        <br><br>
-        I. A precisão na medição de ingredientes é indispensável para alcançar padrões consistentes em preparações culinárias.<br>
-        II. A medição de alimentos líquidos com medidores de vidro graduados não impacta no sucesso das receitas.<br>
-        III. Ingredientes sólidos e líquidos podem ser medidos de forma imprecisa, sem comprometer os resultados.<br>
-        IV. A padronização de utensílios de medição contribui diretamente para a uniformidade das preparações culinárias.
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="true">A. V, F, F, V</button>
-        <button data-correct="false">B. F, V, F, F</button>
-        <button data-correct="false">C. F, V, V, F</button>
-        <button data-correct="false">D. V, V, F, F</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      45-  As baixas temperaturas permitem retardar ou inibir as reações químicas de deterioração natural e as atividades enzimáticas sobre os componentes dos alimentos, diminuindo ou inibindo o crescimento e as atividades dos microrganismos. Atualmente, destacam-se a refrigeração e o congelamento como métodos que utilizam temperaturas baixas para conservação dos alimentos. Considerando a conservação dos alimentos:
-        <br><br>
-        I. Diversas bebidas alcoólicas surgiram através da fermentação de cereais e frutos, permitindo a conservação e o consumo dessas bebidas por mais tempo.<br>
-        II. O leite é um alimento perecível e, uma das alternativas de aproveitamento das propriedades nutritivas e, de conservação, é transformá-lo em alimentos mais duradouros, como queijos e manteigas.<br>
-        III. O processo de pasteurização prolonga a vida de prateleira de diversos produtos, como o leite, na sua forma líquida.<br>
-        IV. Aditivos, como conservantes, corantes, antioxidantes, espessantes, emulsificantes, edulcorantes, acidulantes e humectantes são substâncias que, adicionadas aos alimentos, servem para aumentar a durabilidade, melhorar a aparência e o sabor dos alimentos.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. I e II, apenas.</button>
-        <button data-correct="false">B. II e III, apenas.</button>
-        <button data-correct="false">C. III e IV, apenas.</button>
-        <button data-correct="true">D. I, II, III e IV.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-      46-  Há basicamente três tipos de estrutura na composição das carnes: tecido muscular, tecido conjuntivo e tecido adiposo, além de ossos e cartilagens. No tecido muscular, são encontrados feixes de fibras musculares unidos por tecido conectivo, que formam a membrana muscular, os tendões e os ligamentos. Quanto menores forem os feixes de fibras, mais macia é a carne. A maciez é influenciada por diversos fatores, mas a carne pode se tornar mais macia por processos mecânicos, térmicos e químicos (enzimáticos).
-        <br><br>
-        Em relação aos processos de amaciamento das carnes:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="true">A. O amaciamento mecânico promove ruptura das fibras musculares.</button>
-        <button data-correct="false">B. O amaciamento térmico utiliza apenas calor seco, preservando as fibras musculares.</button>
-        <button data-correct="false">C. O amaciamento químico ocorre exclusivamente com o uso de conservantes.</button>
-        <button data-correct="false">D. O amaciamento mecânico só pode ser realizado manualmente.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-   <div class="quiz-container">
-    <h2>
-      47-  Pescado é todo animal que vive normalmente em água doce ou salgada e é utilizado para a alimentação. Pescado fresco é aquele que não sofreu qualquer processo de conservação, exceto pelo resfriamento, e que mantém seus caracteres essenciais inalterados. Compreende peixes, crustáceos, moluscos, anfíbios, quelônios e mamíferos de água doce ou salgada, usados na alimentação humana.
-        <br><br>
-        Sobre as características adequadas dos peixes frescos, é correto afirmar:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="true">A. Membrana que reveste a guelra rígida e escamas aderidas.</button>
-        <button data-correct="false">B. Odor forte e coloração opaca nas guelras.</button>
-        <button data-correct="false">C. Escamas soltas e carne flácida.</button>
-        <button data-correct="false">D. Olhos fundos e sem brilho.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-    <div class="quiz-container">
-    <h2>
-        O pão é um alimento que surgiu nos primórdios da civilização e até hoje faz parte diariamente da dieta humana. Com o passar dos séculos, novas técnicas e tecnologias impulsionaram o aparecimento de outros tipos de pães, proporcionando o aumento do consumo deste alimento, sendo assim aparece como uma alternativa interessante de alimento, com potencial para se tornar veículo de incorporação de novas fontes nutricionais.
-        <br><br>
-        Fonte: FERREIRA, Pedro Vinícius Duarte. <em>Desenvolvimento e análise física de pão sem glúten com diferentes fermentos</em>. 2022. Trabalho de Conclusão de Curso. Brasil.
-        <br><br>
-        No que diz respeito às funções dos ingredientes utilizados na produção de pães, analise as afirmativas a seguir:
-        <br><br>
-        I. Os agentes de crescimento e porosidade, comumente conhecidos como fermentos, são responsáveis pela incorporação ou produção de ar (gás CO<sub>2</sub>).<br>
-        II. As finas membranas do glúten é que retêm os gases (bolhas de ar).<br>
-        III. Quanto menor a proporção de glúten na farinha, melhor será a sua qualidade na fabricação de pães, porém, mais dura será a massa.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. II, apenas.</button>
-        <button data-correct="false">B. III, apenas.</button>
-        <button data-correct="true">C. I e II, apenas.</button>
-        <button data-correct="false">D. II e III, apenas.</button>
-        <button data-correct="false">E. I, II e III.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-
-    <div class="quiz-container">
-    <h2>
-     49-   Os ovos são amplamente utilizados na cozinha, devido às suas propriedades funcionais, que proporcionam aos alimentos a cor, viscosidade, emulsificação, geleificação e formação de espuma. São também um dos mais vantajosos e versáteis ingredientes culinários, pois apresentam um custo reduzido e, juntamente com o seu elevado conteúdo proteico, o torna um produto econômico e balanceado. Além de proteína, a clara do ovo, é fonte de zinco, vitamina A, vitamina D e vitamina E.
-        <br><br>
-        Sobre o papel dos ovos na culinária, é correto afirmar que:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="true">A. Emulsificação diz respeito à estabilização de sistema água-óleo, por meio de fosfolipídios e lipoproteínas (tanto na clara como na gema).</button>
-        <button data-correct="false">B. A clara do ovo é a principal responsável pela formação de emulsões, enquanto a gema é inerte no processo.</button>
-        <button data-correct="false">C. A emulsificação nos ovos é um processo limitado apenas à presença de lipídios.</button>
-        <button data-correct="false">D. As propriedades de emulsificação dos ovos se restringem à gema devido à ausência de proteínas na clara.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-    
-<div class="quiz-container">
-    <h2>
-      50-  A mistura é a primeira fase do processamento do pão e outros produtos de panificação, e tem como objetivo a mistura de todos os ingredientes da formulação e o amassamento até um ponto considerado ideal. A fermentação é uma etapa de descanso da massa, após os impactos mecânicos da(s) etapa(s) anterior(es), tendo como objetivos a produção de gás (CO<sub>2</sub>), o desenvolvimento do glúten e a produção de sabor e aroma do pão.
-        <br><br>
-        Fonte: Embrapa. Empresa Brasileira de Pesquisa Agropecuária. Disponível em: 
-        <a href="http://www.agencia.cnptia.embrapa.br" target="_blank">
-        http://www.agencia.cnptia.embrapa.br/gestor/tecnologia_de_alimentos/arvore/CONT000fid5sgie02wjyivc4s473xsat8h6.html</a>.
-        Acesso em: 13 out. 2021.
-        <br><br>
-        Considerando o processo de fermentação, analise as afirmações a seguir:
-        <br><br>
-        I. A fermentação é utilizada na panificação, na produção de bebidas alcoólicas, iogurtes, queijos e produtos à base de soja.<br>
-        II. Massas que levam substâncias de ação rápida (fermento em pó e bicarbonato) precisam ir para o fogo logo após serem misturadas, a fim de aproveitar o efeito do fermento, cuja ação é maior com o aumento de temperatura.<br>
-        III. Na produção de iogurtes ocorre a fermentação do leite por bactérias que produzem ácido lático a partir da lactose.
-        <br><br>
-        É correto o que se afirma em:
-    </h2>
-    
-    <div class="answers">
-        <button data-correct="false">A. I e II, apenas.</button>
-        <button data-correct="false">B. II e III, apenas.</button>
-        <button data-correct="false">C. I e III, apenas.</button>
-        <button data-correct="true">D. I, II e III.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-     
-    <div class="quiz-container">
-    <h2>
-      51-  O termo cocção é muito usado na cozinha, nada mais é do que o processo em que se aplica calor ao alimento com o objetivo de mudar sua estrutura, alterar seu sabor e torná-lo adequado à digestão. Diante disso, os métodos de cocção devem ser vistos como fórmulas que, aplicadas a diferentes ingredientes, produzem resultados também diversos.
-        <br><br>
-        Fonte: <em>PHILIPPI, S. T. Nutrição e técnica dietética.</em> Editora Manole, 2019. Acesso em: 06 de set. 2023.
-        <br><br>
-        Em relação aos métodos de cocção e as operações de preparo dos alimentos, analise as afirmativas:
-        <br><br>
-        I. Todos os métodos de cocção ocorrem através da transmissão de calor, que podem ser: Condução, convecção ou radiação.<br>
-        II. Condução é a transferência de calor por contato direto das partículas da matéria.<br>
-        III. Cocção por micro-ondas se dá por meio da radiação de ondas geradas pelo forno de micro-ondas que aquecem as partículas de água presentes no alimento.<br>
-        IV. Radiação é um processo que dispensa o contato direto do alimento com a fonte de calor, já que a transmissão se dá por meio de ondas.<br>
-        V. Um exemplo prático de convecção é a água em ebulição no cozimento de uma batata ou o ar quente assando um bolo.<br><br>
-        É correto o que se afirma em:
-    </h2>
-
-    <div class="answers">
-        <button data-correct="false">A. I, II e IV, apenas.</button>
-        <button data-correct="false">B. II, III e V, apenas.</button>
-        <button data-correct="false">C. I, III e IV, apenas.</button>
-        <button data-correct="true">D. I, II, III, IV e V.</button>
-    </div>
-
-    <p class="feedback"></p>
-</div>
-
-<script>
-    // JavaScript para interatividade
-    const buttons = document.querySelectorAll(".answers button");
-    const feedback = document.querySelector(".feedback");
-
-    buttons.forEach(button => {
-        button.addEventListener("click", () => {
-            if (button.dataset.correct === "true") {
-                feedback.textContent = "Parabéns, você acertou! 🎉";
-                feedback.style.color = "green";
-            } else {
-                feedback.textContent = "Ops, tente novamente. 😔";
-                feedback.style.color = "red";
-            }
-        });
-    });
-</script>
 
     <button class="print-btn" onclick="window.print()">Imprimir Quiz</button>
+  </div>
 
-    <script>
-        function checkAnswer(button) {
-            const answerContainer = button.closest('.answers');
-            const quizContainer = button.closest('.quiz-container');
-            const isCorrect = button.getAttribute('data-correct') === 'true';
-            const allButtons = answerContainer.querySelectorAll('button');
-            const correctButton = answerContainer.querySelector('button[data-correct="true"]');
-            const feedback = quizContainer.querySelector('.feedback');
+  <script>
+    // Validação do código
+    document.getElementById('btn-submit-code').addEventListener('click', function(){
+      const code = document.getElementById('access-code').value.trim();
+      const fb   = document.getElementById('access-feedback');
+      if (code === '232524') {
+        document.getElementById('access-overlay').style.display = 'none';
+        document.getElementById('quiz-content').style.display   = 'block';
+      } else {
+        fb.textContent = 'Código inválido. Tente novamente.';
+      }
+    });
 
-            allButtons.forEach(btn => {
-                btn.disabled = true;
-                btn.classList.remove('correct', 'incorrect');
-                if (btn === correctButton) {
-                    btn.classList.add('correct');
-                }
-            });
+    // Lógica de interatividade do quiz
+    document.body.addEventListener('click', function(event) {
+      if (event.target.matches('.answers button')) {
+        const btn = event.target;
+        const container = btn.closest('.quiz-container');
+        const all = container.querySelectorAll('.answers button');
+        const correctBtn = container.querySelector('[data-correct="true"]');
+        const feedback = container.querySelector('.feedback');
+        const isCorrect = btn.dataset.correct === 'true';
 
-            feedback.classList.add('visible');
-            if (isCorrect) {
-                feedback.textContent = "Parabéns, continue assim! Você vai muito bem na prova. 🎉";
-                feedback.classList.add('correct');
-                feedback.classList.remove('incorrect');
-            } else {
-                button.classList.add('incorrect');
-                if (correctButton) {
-                    feedback.innerHTML = `Vamos tentar novamente na próxima. 😔<br>A resposta correta é: <strong>${correctButton.textContent}</strong>`;
-                } else {
-                    feedback.textContent = "Vamos tentar novamente na próxima. 😔";
-                }
-                feedback.classList.add('incorrect');
-                feedback.classList.remove('correct');
-            }
+        all.forEach(b => b.disabled = true);
+        correctBtn.classList.add('correct');
+        feedback.classList.add('visible');
+        if (isCorrect) {
+          feedback.textContent = 'Parabéns, você acertou! 🎉';
+          feedback.classList.add('correct');
+        } else {
+          btn.classList.add('incorrect');
+          feedback.textContent = 'Resposta correta: ' + correctBtn.textContent;
+          feedback.classList.add('incorrect');
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.addEventListener('click', function(event) {
-                if (event.target.matches('.answers button')) {
-                    checkAnswer(event.target);
-                }
-            });
-        });
-    </script>
+      }
+    });
+  </script>
 
 </body>
 </html>
